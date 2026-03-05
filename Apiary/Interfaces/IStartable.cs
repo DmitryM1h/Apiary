@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace Apiary.Interfaces
+﻿namespace ApiaryEngine.Interfaces
 {
     public interface IStartable
     {

@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace Apiary.Exceptions
+﻿namespace ApiaryEngine.Exceptions
 {
     public class OutOfHoneyException : Exception
     {
