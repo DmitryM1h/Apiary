@@ -5,7 +5,7 @@ using ApiaryEngine.Interfaces;
 
 namespace ApiaryEngine.Domain.Bees.QueenBee
 {
-    public class QueenBee : Bee
+    public class QueenBee : Bee, ITickable
     {
         private const int _amountOfHoneyToBornBee = 1000;
 
@@ -30,7 +30,10 @@ namespace ApiaryEngine.Domain.Bees.QueenBee
                 var honey = _hive.TryTakeHoney(_amountOfHoneyToBornBee); // взять ресурс
 
                 if (honey == -1)
+                {
+                    _queenState.SwitchState();
                     return;
+                }
                 else
                     _queenState.UpdateCollectedHoney(honey);
 
@@ -48,6 +51,10 @@ namespace ApiaryEngine.Domain.Bees.QueenBee
                 var workerBee = new WorkerBee(HiveId);
 
                 Console.WriteLine($"Королева (ID= {BeeId}) родила пчелку!");
+
+                _queenState.producingBeeState.FinishProducing();
+
+                _queenState.SwitchState();
             }
         }
 
