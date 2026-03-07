@@ -19,6 +19,8 @@ namespace ApiaryEngine.Domain.Bees
             BeeId = IdentityProvider.GetIdentity();
             HiveId = hiveId;
 
+
+            // todo переделать на 1 поток, который обслуживает все сущности, а не создавать каждой свой
             Task.Run(async () =>
             {
                 try
@@ -27,7 +29,7 @@ namespace ApiaryEngine.Domain.Bees
                 }
                 catch (LostBeeException ex)
                 {
-                    Console.WriteLine("Пчелка потеряла улей :c ");
+                    Console.WriteLine($"Пчелка с (ID= {BeeId}) потеряла улей :c ");
                 }
                 catch (Exception ex)
                 {
@@ -66,7 +68,7 @@ namespace ApiaryEngine.Domain.Bees
         {
             CollectedHoney += _rnd.Next(100, 900);
 
-            Console.WriteLine($"Пчелка (ID= {BeeId}) уже собрала {CollectedHoney} меда!");
+            Console.WriteLine($"Пчелка (ID= {BeeId}) (HiveID= {HiveId}) собрала {CollectedHoney} меда!");
 
         }
     }

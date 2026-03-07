@@ -7,7 +7,7 @@ namespace ApiaryEngine.Domain
         public int HiveId { get; init; }
 
         private readonly ConcurrentDictionary<int, int> HoneyByBee = new();
-        public int Honey => HoneyByBee.Values.Sum();
+        public int Honey => HoneyByBee.Values.ToList().Sum();
 
         public Hive(int hiveId)
         {
@@ -48,13 +48,14 @@ namespace ApiaryEngine.Domain
 
         public void IncreaseHoney(int beeId, int amount)
         {
-            HoneyByBee.AddOrUpdate(beeId,
-                (amount) => { return amount; },
-                (amount, currentValue) => { return currentValue + amount; });
-            
-            
-            Console.WriteLine($"Теперь в улье (ID= {HiveId}) {Honey} ед. меда!");
-        }
 
+            HoneyByBee.AddOrUpdate(beeId,
+                amount,
+                (key, currentValue) => { return currentValue + amount; });
+
+
+            Console.WriteLine($"Теперь в улье (ID= {HiveId}) {Honey} ед. меда!");
+
+        }
     }
 }

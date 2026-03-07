@@ -7,7 +7,7 @@ namespace ApiaryEngine.Domain.Bees
 {
     public class QueenBee : Bee, IStartable
     {
-        private const int _amountOfHoneyToBornBee = 10;
+        private const int _amountOfHoneyToBornBee = 1000;
 
         private readonly Hive _hive;
 
@@ -49,6 +49,8 @@ namespace ApiaryEngine.Domain.Bees
         public async ValueTask CreateBee()
         {
             var honey = _hive.TryTakeHoney(_amountOfHoneyToBornBee); // взять ресурс
+
+            Console.WriteLine($"Королева (ID= {BeeId}), (HiveID= {HiveId}) взяла мед {_amountOfHoneyToBornBee}!");
 
             if (honey == -1)
                 return;
