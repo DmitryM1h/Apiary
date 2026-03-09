@@ -25,7 +25,7 @@ namespace ApiaryEngine
             {
                 var hive = new Hive(i);
 
-                var queenBee = new QueenBee(hive);
+                var queenBee = new QueenBee(i);
 
                 List<WorkerBee> workers = new();
 

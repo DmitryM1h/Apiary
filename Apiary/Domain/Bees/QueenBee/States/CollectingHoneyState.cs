@@ -1,12 +1,11 @@
 ﻿using ApiaryEngine.Exceptions;
 using ApiaryEngine.Interfaces;
-using System;
-using System.Collections.Generic;
-using System.Text;
+
+
 
 namespace ApiaryEngine.Domain.Bees.QueenBee.States
 {
-    internal class CollectingHoneyState : IState
+    public class CollectingHoneyState : IState
     {
         public int CollectedHoney { get; set; } = 0;
         public bool IsCompleted { get; set; }

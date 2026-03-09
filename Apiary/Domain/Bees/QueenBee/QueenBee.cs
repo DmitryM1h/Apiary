@@ -10,7 +10,10 @@ namespace ApiaryEngine.Domain.Bees.QueenBee
     {
         public const int _amountOfHoneyToBornBee = 1000;
 
-        IState state;
+        public const int _secondsToTryProduce = 10;
+
+
+        public IState State { get; private set; }
 
 
         public QueenBee(int hiveId)
@@ -19,17 +22,17 @@ namespace ApiaryEngine.Domain.Bees.QueenBee
 
             HiveId = hiveId;
 
-            state = new WaitingState(this);
+            State = new WaitingState(this);
         }
 
 
         public async Task Tick()
         {
-            state.Act();
+            State.Act();
 
-            if(state.IsCompleted)
+            if(State.IsCompleted)
             {
-                state = state.NextState();
+                State = State.NextState();
             }
         }
     }

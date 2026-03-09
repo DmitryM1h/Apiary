@@ -14,7 +14,7 @@ namespace ApiaryEngine.Domain.Bees.QueenBee.States
         public WaitingState(QueenBee context)
         {
             Context = context;
-            _nextTimeAct = DateTime.Now.AddSeconds(15);
+            _nextTimeAct = DateTime.Now.AddSeconds(QueenBee._secondsToTryProduce);
         }
 
         public bool IsCompleted { get; set; } = false;
