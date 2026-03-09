@@ -4,9 +4,7 @@ using System.Text;
 
 namespace ApiaryEngine.Interfaces
 {
-    public interface ITickable
+    internal interface IContext
     {
-        public Task Tick();
-       
     }
 }

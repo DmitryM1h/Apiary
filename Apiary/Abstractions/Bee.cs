@@ -2,7 +2,7 @@
 {
     public abstract class Bee
     {
-        protected int BeeId { get; init; }
-        protected int HiveId { get; init; }
+        public int BeeId { get; init; }
+        public int HiveId { get; init; }
     }
 }

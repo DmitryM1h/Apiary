@@ -1,6 +1,6 @@
 ﻿using ApiaryEngine.Domain;
-using ApiaryEngine.Domain.Bees;
 using ApiaryEngine.Domain.Bees.QueenBee;
+using ApiaryEngine.Domain.Bees.WorkerBee;
 
 namespace ApiaryEngine
 {
