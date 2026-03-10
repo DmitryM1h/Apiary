@@ -1,5 +1,5 @@
 ﻿using ApiaryEngine.abstractions;
-using ApiaryEngine.Interfaces;
+using ApiaryEngine.Abstractions;
 using System;
 using System.Collections.Generic;
 using System.Text;

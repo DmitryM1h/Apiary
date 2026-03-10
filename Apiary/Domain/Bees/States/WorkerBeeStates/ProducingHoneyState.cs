@@ -1,5 +1,5 @@
-﻿using ApiaryEngine.Domain.States.WorkerBeeStates;
-using ApiaryEngine.Interfaces;
+﻿using ApiaryEngine.Abstractions;
+using ApiaryEngine.Domain.States.WorkerBeeStates;
 using System;
 using System.Collections.Generic;
 using System.Text;

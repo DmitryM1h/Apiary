@@ -1,6 +1,6 @@
-﻿using ApiaryEngine.Domain.Bees;
+﻿using ApiaryEngine.Abstractions;
+using ApiaryEngine.Domain.Bees;
 using ApiaryEngine.Domain.Bees.States.WorkerBeeStates;
-using ApiaryEngine.Interfaces;
 
 
 namespace ApiaryEngine.Domain.States.WorkerBeeStates;

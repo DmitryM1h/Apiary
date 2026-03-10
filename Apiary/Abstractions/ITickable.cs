@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Text;
 
-namespace ApiaryEngine.Interfaces
+namespace ApiaryEngine.Abstractions
 {
     public interface ITickable
     {

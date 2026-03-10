@@ -1,7 +1,7 @@
 ﻿using ApiaryEngine.abstractions;
+using ApiaryEngine.Abstractions;
 using ApiaryEngine.Domain.States.QueenBeeStates;
 using ApiaryEngine.Helpers;
-using ApiaryEngine.Interfaces;
 
 
 namespace ApiaryEngine.Domain.Bees

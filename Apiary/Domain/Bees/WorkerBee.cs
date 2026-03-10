@@ -1,7 +1,7 @@
 ﻿using ApiaryEngine.abstractions;
+using ApiaryEngine.Abstractions;
 using ApiaryEngine.Exceptions;
 using ApiaryEngine.Helpers;
-using ApiaryEngine.Interfaces;
 
 namespace ApiaryEngine.Domain.Bees
 {

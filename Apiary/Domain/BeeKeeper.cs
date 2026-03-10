@@ -1,8 +1,9 @@
-﻿using ApiaryEngine.Interfaces;
+﻿using ApiaryEngine.Abstractions;
+using ApiaryEngine.Interfaces;
 
 namespace ApiaryEngine.Domain
 {
-    public class BeeKeeper : IStartable
+    public class BeeKeeper : ITickable
     {
         public int _collectedHoney = 0;
 

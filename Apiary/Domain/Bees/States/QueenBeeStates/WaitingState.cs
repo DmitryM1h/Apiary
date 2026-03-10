@@ -1,5 +1,5 @@
-﻿using ApiaryEngine.Domain.Bees;
-using ApiaryEngine.Interfaces;
+﻿using ApiaryEngine.Abstractions;
+using ApiaryEngine.Domain.Bees;
 
 
 namespace ApiaryEngine.Domain.States.QueenBeeStates;

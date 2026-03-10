@@ -1,4 +1,8 @@
 <Solution>
-  <Project Path="Apiary.Tests/Apiary.Tests.csproj" Id="0dc02cc8-aaee-401e-9a1c-f52fa6cb67ec" />
-  <Project Path="Apiary/ApiaryEngine.csproj" />
+  <Project Path="Apiary.Tests/Apiary.Tests.csproj" Id="0dc02cc8-aaee-401e-9a1c-f52fa6cb67ec">
+    <Build Solution="Debug|*" Project="false" />
+  </Project>
+  <Project Path="Apiary/ApiaryEngine.csproj">
+    <Build Solution="Debug|*" Project="false" />
+  </Project>
 </Solution>

@@ -1,21 +1,26 @@
-﻿using ApiaryEngine.Domain;
+﻿using ApiaryEngine.Abstractions;
+using ApiaryEngine.Domain;
 using ApiaryEngine.Domain.Bees;
 
 namespace ApiaryEngine
 {
     public class Engine
     {
-        TaskCompletionSource src = new();
+        TaskCompletionSource src;
 
-        CancellationTokenSource cts = new();
+        CancellationTokenSource cts;
+
+
+        List<ITickable> actors = new();
 
         public Engine()
         {
-            var cts = new CancellationTokenSource();
+            src = new TaskCompletionSource();
+            cts = new CancellationTokenSource();
             cts.Token.Register(() => src.SetResult());
         }
 
-        public Task Run()
+        public async Task Run()
         {
 
             List<Hive> hives = new();
@@ -28,12 +33,18 @@ namespace ApiaryEngine
 
                 List<WorkerBee> workers = new();
 
+                var guardBee = new GuardBee(hive);
+
                 for (int j = 0; j < 3; j++)
                 {
                     var bee = new WorkerBee(i);
+                    actors.Add(bee);
                 }
 
                 hives.Add(hive);
+
+                actors.Add(queenBee);
+                actors.Add(guardBee)
             }
 
             var hivesArr = hives.ToArray();
@@ -42,8 +53,18 @@ namespace ApiaryEngine
 
             var beeKeeper = new BeeKeeper(hivesArr);
 
+            actors.Add(beeKeeper);
 
-            return src.Task;
+            while(true)
+            {
+                foreach (var liver in actors)
+                {
+                    await liver.Tick();
+
+                    await Task.Delay(100);
+                }
+            }
+
         }
     }
 }
