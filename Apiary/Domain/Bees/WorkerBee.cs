@@ -3,7 +3,7 @@ using ApiaryEngine.Exceptions;
 using ApiaryEngine.Helpers;
 using ApiaryEngine.Interfaces;
 
-namespace ApiaryEngine.Domain.Bees.WorkerBee
+namespace ApiaryEngine.Domain.Bees
 {
     public class WorkerBee : Bee, ITickable
     {

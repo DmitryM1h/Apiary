@@ -1,26 +1,29 @@
 ﻿using ApiaryEngine.abstractions;
-using ApiaryEngine.Domain.Bees.QueenBee.States;
+using ApiaryEngine.Domain.States.QueenBeeStates;
 using ApiaryEngine.Helpers;
 using ApiaryEngine.Interfaces;
 
 
-namespace ApiaryEngine.Domain.Bees.QueenBee
+namespace ApiaryEngine.Domain.Bees
 {
     public class QueenBee : Bee, ITickable
     {
         public const int _amountOfHoneyToBornBee = 1000;
 
         public const int _secondsToTryProduce = 10;
+        public Hive _hive { get; set; }
 
 
         public IState State { get; private set; }
 
 
-        public QueenBee(int hiveId)
+        public QueenBee(Hive hive)
         {
             BeeId = IdentityProvider.GetIdentity();
 
-            HiveId = hiveId;
+            HiveId = hive.HiveId;
+            
+            _hive = hive;
 
             State = new WaitingState(this);
         }

@@ -8,7 +8,9 @@
         {
             Console.WriteLine($"Кол-во пчелок на данный момент {beeCounter + 1}");
 
-            return Interlocked.Increment(ref beeCounter);
+            return ++beeCounter;
+
+            //return Interlocked.Increment(ref beeCounter);
         }
     }
 }

@@ -1,6 +1,7 @@
 ﻿using ApiaryEngine.abstractions;
-using ApiaryEngine.Domain.Bees.QueenBee;
-using ApiaryEngine.Domain.Bees.QueenBee.States;
+using ApiaryEngine.Domain;
+using ApiaryEngine.Domain.Bees;
+using ApiaryEngine.Domain.States.QueenBeeStates;
 
 namespace Apiary.Tests
 {
@@ -9,7 +10,9 @@ namespace Apiary.Tests
         [Fact]
         public async Task WaitingStateCompleted()
         {
-            var bee = new QueenBee(hiveId: 2);
+            var hive = new Hive(hiveId: 2);
+
+            var bee = new QueenBee(hive);
 
             Assert.Equal(typeof(WaitingState), bee.State.GetType());
 

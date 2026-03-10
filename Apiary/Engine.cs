@@ -1,6 +1,5 @@
 ﻿using ApiaryEngine.Domain;
-using ApiaryEngine.Domain.Bees.QueenBee;
-using ApiaryEngine.Domain.Bees.WorkerBee;
+using ApiaryEngine.Domain.Bees;
 
 namespace ApiaryEngine
 {
@@ -25,7 +24,7 @@ namespace ApiaryEngine
             {
                 var hive = new Hive(i);
 
-                var queenBee = new QueenBee(i);
+                var queenBee = new QueenBee(hive);
 
                 List<WorkerBee> workers = new();
 

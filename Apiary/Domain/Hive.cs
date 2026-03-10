@@ -9,11 +9,22 @@ namespace ApiaryEngine.Domain
         private readonly ConcurrentDictionary<int, int> HoneyByBee = new();
         public int Honey => HoneyByBee.Values.ToList().Sum();
 
+        public readonly ConcurrentDictionary<int, bool> BeesInHoney = new();
+
         public Hive(int hiveId)
         {
             HiveId = hiveId;
         }
 
+        public void EnterHoney()
+        {
+
+        }
+
+        public void QuitHoney()
+        {
+
+        }
 
         public int TryTakeHoney(int amount)
         {
