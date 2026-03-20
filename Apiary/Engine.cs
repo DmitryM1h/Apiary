@@ -44,7 +44,7 @@ namespace ApiaryEngine
                 hives.Add(hive);
 
                 actors.Add(queenBee);
-                actors.Add(guardBee)
+                actors.Add(guardBee);
             }
 
             var hivesArr = hives.ToArray();
@@ -57,9 +57,9 @@ namespace ApiaryEngine
 
             while(true)
             {
-                foreach (var liver in actors)
+                foreach (var actor in actors)
                 {
-                    await liver.Tick();
+                    await actor.Tick();
 
                     await Task.Delay(100);
                 }

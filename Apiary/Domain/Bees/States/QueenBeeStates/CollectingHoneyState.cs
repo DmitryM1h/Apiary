@@ -32,6 +32,9 @@ namespace ApiaryEngine.Domain.States.QueenBeeStates
                 return;
             }
 
+            CollectedHoney = honey;
+            IsCompleted = true;
+
         }
 
         public IState NextState()

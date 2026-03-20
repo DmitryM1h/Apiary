@@ -17,7 +17,7 @@ namespace ApiaryEngine.Domain.Bees
 
         }
 
-        Task ITickable.Tick()
+        public Task Tick()
         {
             throw new NotImplementedException();
         }

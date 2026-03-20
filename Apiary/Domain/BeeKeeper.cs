@@ -1,5 +1,4 @@
 ﻿using ApiaryEngine.Abstractions;
-using ApiaryEngine.Interfaces;
 
 namespace ApiaryEngine.Domain
 {
@@ -26,6 +25,11 @@ namespace ApiaryEngine.Domain
                     Console.WriteLine(ex.Message);
                 }
             });
+        }
+
+        public Task Tick()
+        {
+            return Task.CompletedTask; 
         }
 
         public async Task StartAsync(CancellationToken cancellationToken)
