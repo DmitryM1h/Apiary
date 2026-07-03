@@ -1,10 +1,8 @@
 ﻿using ApiaryEngine.Abstractions;
-using ApiaryEngine.Domain.States.WorkerBeeStates;
-using System;
-using System.Collections.Generic;
-using System.Text;
 
-namespace ApiaryEngine.Domain.Bees.States.WorkerBeeStates;
+
+
+namespace ApiaryEngine.Domain.Bees.WorkerBee.States;
 
 public class ProducingHoneyState : IState
 {

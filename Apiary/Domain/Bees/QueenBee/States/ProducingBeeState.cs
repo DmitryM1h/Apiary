@@ -1,9 +1,6 @@
-﻿using ApiaryEngine.Domain.Bees;
-using ApiaryEngine.Abstractions;
+﻿using ApiaryEngine.Abstractions;
 
-
-
-namespace ApiaryEngine.Domain.States.QueenBeeStates;
+namespace ApiaryEngine.Domain.Bees.QueenBee.States;
 
 
 public class ProducingBeeState : IState

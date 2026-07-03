@@ -1,41 +1,41 @@
-﻿using ApiaryEngine.Abstractions;
+﻿using ApiaryEngine.abstractions;
+using ApiaryEngine.Abstractions;
 using ApiaryEngine.Domain;
-using ApiaryEngine.Domain.Bees;
+using ApiaryEngine.Domain.Bees.WorkerBee;
+using System.Threading.Channels;
 
 namespace ApiaryEngine
 {
     public class Engine
     {
-        TaskCompletionSource src;
+        private readonly CancellationToken _cts;
 
-        CancellationTokenSource cts;
+        private readonly List<IActor> actors = [];
 
+        private readonly Channel<IActorState> _statesBus = Channel.CreateBounded<IActorState>(1000);
 
-        List<ITickable> actors = new();
+        public ChannelReader<IActorState> _stateReader => _statesBus.Reader;
 
-        public Engine()
+        public Engine(CancellationToken cts = default)
         {
-            src = new TaskCompletionSource();
-            cts = new CancellationTokenSource();
-            cts.Token.Register(() => src.SetResult());
+            _cts = cts;
         }
 
         public async Task Run()
         {
-
             List<Hive> hives = new();
 
-            for (int i = 0; i < 5; i++)
+            for (int i = 1; i < 2; i++) // пока 5. больше 10 нельзя
             {
                 var hive = new Hive(i);
 
-                var queenBee = new QueenBee(hive);
+                //var queenBee = new QueenBee(hive);
 
                 List<WorkerBee> workers = new();
 
-                var guardBee = new GuardBee(hive);
+               // var guardBee = new GuardBee(hive);
 
-                for (int j = 0; j < 3; j++)
+                for (int j = 0; j < 1; j++)
                 {
                     var bee = new WorkerBee(i);
                     actors.Add(bee);
@@ -43,27 +43,33 @@ namespace ApiaryEngine
 
                 hives.Add(hive);
 
-                actors.Add(queenBee);
-                actors.Add(guardBee);
+               // actors.Add(queenBee);
+                //actors.Add(guardBee);
             }
 
             var hivesArr = hives.ToArray();
 
             Apiary.SetHives(hivesArr);
 
-            var beeKeeper = new BeeKeeper(hivesArr);
+            // var beeKeeper = new BeeKeeper(hivesArr);
 
-            actors.Add(beeKeeper);
+            // actors.Add(beeKeeper);
 
-            while(true)
+            var _timer = new PeriodicTimer(TimeSpan.FromMilliseconds(500));
+
+            while(await _timer.WaitForNextTickAsync(_cts))
             {
-                foreach (var actor in actors)
+                for(int i = 0; i < actors.Count; i++)
                 {
-                    await actor.Tick();
+                    actors[i].Tick();
 
-                    await Task.Delay(100);
+                    var actorState = actors[i].GetState();
+
+                    await _statesBus.Writer.WriteAsync(actorState);
                 }
             }
+
+     
 
         }
     }

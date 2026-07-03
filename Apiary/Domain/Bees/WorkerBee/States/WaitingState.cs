@@ -1,9 +1,7 @@
 ﻿using ApiaryEngine.Abstractions;
-using ApiaryEngine.Domain.Bees;
-using ApiaryEngine.Domain.Bees.States.WorkerBeeStates;
 
 
-namespace ApiaryEngine.Domain.States.WorkerBeeStates;
+namespace ApiaryEngine.Domain.Bees.WorkerBee.States;
 
 public class WaitingState : IState
 {
@@ -14,7 +12,7 @@ public class WaitingState : IState
     public WaitingState(WorkerBee context)
     {
         Context = context;
-        _nextTimeAct = DateTime.Now.AddSeconds(QueenBee._secondsToTryProduce);
+        _nextTimeAct = DateTime.Now.AddSeconds(10);
     }
 
     public bool IsCompleted { get; set; } = false;
@@ -29,7 +27,7 @@ public class WaitingState : IState
 
     public IState NextState()
     {
-        return new ProducingHoneyState(Context);
+        return new VisitingFlowersState(Context);
     }
 
 }

@@ -1,0 +1,72 @@
+﻿using ApiaryEngine.Abstractions;
+
+
+namespace ApiaryEngine.Domain.Bees.WorkerBee.States
+{
+    public class DeliveringToHoneyState : IState
+    {
+        public bool IsCompleted { get; set; }
+
+        WorkerBee _context;
+
+        IEnumerator<Point> _routeToHome;
+
+
+        public DeliveringToHoneyState(WorkerBee context)
+        {
+            _context = context;
+            _routeToHome = RouteToHome(_context.Position)
+                          .GetEnumerator();
+        }
+        // TODO Летит в свой улей, но может перепутать с каким то шансом
+        public void Act()
+        {
+            if (!_routeToHome.MoveNext())
+            {
+                IsCompleted = true;
+                _routeToHome.Dispose();
+                return;
+            }
+            var newPosition = _routeToHome.Current;
+
+            _context.UpdatePosition(newPosition);
+        }
+
+        private IEnumerable<Point> RouteToHome(Point initialPosition)
+        {
+            var destinationPosition = Apiary.HivePositions[_context.HiveId];
+
+            var currentPosition = initialPosition;
+
+            int stepX = initialPosition.X < destinationPosition.X ? 1 : -1;
+            int stepY = initialPosition.Y < destinationPosition.Y ? 1 : -1;
+
+            while (currentPosition != destinationPosition)
+            {
+                int x = currentPosition.X + stepX;
+                int y = currentPosition.Y + stepY;
+                if ((y > destinationPosition.Y && stepX == 1) || (y < destinationPosition.Y && stepX == -1))
+                {
+                    y = destinationPosition.Y;
+                    stepY = 0;
+                }
+                if ((x > destinationPosition.X && stepX == 1) || (x < destinationPosition.X && stepX == -1))
+                {
+                    x = destinationPosition.X;
+                    stepX = 0;
+                }
+                
+                currentPosition = new Point(x, y);
+
+                yield return currentPosition;
+
+            }
+        }
+
+
+        public IState NextState()
+        {
+            return new WaitingState(_context);
+        }
+    }
+}

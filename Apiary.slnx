@@ -5,4 +5,5 @@
   <Project Path="Apiary/ApiaryEngine.csproj">
     <Build Solution="Debug|*" Project="false" />
   </Project>
+  <Project Path="ApiaryServer/ApiaryServer.csproj" Id="178836b8-2019-424e-80e5-9548c627f671" />
 </Solution>

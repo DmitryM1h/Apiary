@@ -16,16 +16,6 @@ namespace ApiaryEngine.Domain
             HiveId = hiveId;
         }
 
-        public void EnterHoney()
-        {
-
-        }
-
-        public void QuitHoney()
-        {
-
-        }
-
         public int TryTakeHoney(int amount)
         {
             if (amount > Honey)

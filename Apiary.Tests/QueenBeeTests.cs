@@ -1,7 +1,7 @@
 ﻿using ApiaryEngine.abstractions;
 using ApiaryEngine.Domain;
-using ApiaryEngine.Domain.Bees;
-using ApiaryEngine.Domain.States.QueenBeeStates;
+using ApiaryEngine.Domain.Bees.QueenBee;
+using ApiaryEngine.Domain.Bees.QueenBee.States;
 
 namespace Apiary.Tests
 {
@@ -18,7 +18,7 @@ namespace Apiary.Tests
 
             await Task.Delay(TimeSpan.FromSeconds(QueenBee._secondsToTryProduce));
 
-            await bee.Tick();
+            bee.Tick();
 
             Assert.Equal(typeof(CollectingHoneyState), bee.State.GetType());
 

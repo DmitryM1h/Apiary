@@ -1,8 +1,7 @@
 ﻿
-
-
 using ApiaryEngine;
 
-Engine engine = new Engine();
+
+Engine engine = new();
 
 await engine.Run();

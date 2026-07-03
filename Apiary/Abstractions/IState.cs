@@ -9,5 +9,7 @@ namespace ApiaryEngine.Abstractions
         public void Act();
         public bool IsCompleted { get; set; }
         public IState NextState();
+
+        public string StateType { get { return GetType().Name; } }
     }
 }

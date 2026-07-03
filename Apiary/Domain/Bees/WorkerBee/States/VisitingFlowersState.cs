@@ -1,0 +1,102 @@
+﻿using ApiaryEngine.Abstractions;
+
+
+
+namespace ApiaryEngine.Domain.Bees.WorkerBee.States
+{
+    public class VisitingFlowersState : IState
+    {
+        public bool IsCompleted { get; set; }
+
+        WorkerBee BeeContext;
+        IEnumerator<Point> _routeToFlower;
+        public VisitingFlowersState(WorkerBee _context)
+        {
+            BeeContext = _context;
+            _routeToFlower = RouteToRandomFlower(BeeContext.Position)
+                            .GetEnumerator();
+        }
+
+        public void Act()
+        {
+            if(!_routeToFlower.MoveNext())
+            {
+                IsCompleted = true;
+                _routeToFlower.Dispose();
+                return;
+            }
+            var newPosition = _routeToFlower.Current;
+
+            BeeContext.UpdatePosition(newPosition);
+
+        }
+
+        public IState NextState()
+        {
+            return new DeliveringToHoneyState(BeeContext);
+        }
+
+        public Flower FindClosestFlower()
+        {
+            var currentPostion = BeeContext.Position;
+
+            int closestFlowerId = 0;
+            double closestDist = double.MaxValue;
+
+            foreach(var (flowerId, position) in Apiary.FlowerPositions)
+            {
+                var diffX = (position.X - currentPostion.X);
+                var diffY = (position.Y - currentPostion.Y);
+                var dist = Math.Sqrt(diffX * diffX + diffY * diffY);
+                if(dist < closestDist)
+                {
+                    closestDist = dist;
+                    closestFlowerId = flowerId;
+                }
+            }
+
+            return Apiary.FindFlower(closestFlowerId)!;
+        }
+
+        private IEnumerable<Point> RouteToRandomFlower(Point initialPosition)
+        {
+            var (flower, destinationPosition) = GetRandomFlower();
+
+            Console.WriteLine($"Пчелка {BeeContext.GetType().Name} {BeeContext.BeeId} двигается к цветку {flower.Id} {destinationPosition}");
+
+            var currentPosition = initialPosition;
+
+            int stepX = initialPosition.X < destinationPosition.X ? 1 : -1;
+            int stepY = initialPosition.Y < destinationPosition.Y ? 1 : -1;
+
+            while(currentPosition != destinationPosition)
+            {
+                int x = currentPosition.X + stepX;
+                int y = currentPosition.Y + stepY;
+                if ((y > destinationPosition.Y && stepX == 1) || (y < destinationPosition.Y && stepX == -1))
+                {
+                    y = destinationPosition.Y;
+                    stepY = 0;
+                }
+                if ((x > destinationPosition.X && stepX == 1) || (x < destinationPosition.X && stepX == -1))
+                {
+                    x = destinationPosition.X;
+                    stepX = 0;
+                }
+                currentPosition = new Point(x, y);
+                yield return currentPosition;
+
+            }
+        }
+
+        public static (Flower flower, Point position) GetRandomFlower()
+        {
+           var keys =  Apiary.Flowers.Keys;
+
+           var randomFlowerId = Random.Shared.Next(0, keys.Count() - 1);
+
+           return (Apiary.FindFlower(randomFlowerId)!, Apiary.FlowerPositions[randomFlowerId]);
+                
+        }
+    }
+}

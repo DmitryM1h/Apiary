@@ -1,8 +1,7 @@
 ﻿using ApiaryEngine.Abstractions;
-using ApiaryEngine.Domain.Bees;
 
 
-namespace ApiaryEngine.Domain.States.QueenBeeStates;
+namespace ApiaryEngine.Domain.Bees.QueenBee.States;
 
 public class WaitingState : IState
 {

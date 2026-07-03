@@ -1,10 +1,9 @@
 ﻿using ApiaryEngine.Abstractions;
-using ApiaryEngine.Domain.Bees;
 using ApiaryEngine.Exceptions;
 
 
 
-namespace ApiaryEngine.Domain.States.QueenBeeStates
+namespace ApiaryEngine.Domain.Bees.QueenBee.States
 {
     public class CollectingHoneyState : IState
     {
@@ -19,10 +18,7 @@ namespace ApiaryEngine.Domain.States.QueenBeeStates
 
         public void Act()
         {
-            var hive = Context._hive;
-
-            if (hive is null)
-                throw new LostBeeException();
+            var hive = Context._hive ?? throw new LostBeeException();
 
             var honey = hive.TryTakeHoney(QueenBee._amountOfHoneyToBornBee);
 
