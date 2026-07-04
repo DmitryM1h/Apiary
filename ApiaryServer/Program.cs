@@ -9,7 +9,20 @@ builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
+builder.Services.AddCors(opt =>
+{
+
+    opt.AddPolicy("AllowVue", policy =>
+    {
+        policy.WithOrigins("http://localhost:5173")
+              .AllowAnyHeader()
+              .AllowAnyMethod();
+    });
+});
+
 var app = builder.Build();
+
+app.UseCors("AllowVue");
 
 app.UseHttpsRedirection();
 
@@ -25,8 +38,7 @@ app.MapGet("api/ApiaryStates", (CancellationToken token) =>
      try
      {
          return Results.ServerSentEvents(
-             apiaryEngine._stateReader.ReadAllAsync(token),
-             "ActorsStates");
+             apiaryEngine._stateReader.ReadAllAsync(token));
      }
      catch (OperationCanceledException)
      {

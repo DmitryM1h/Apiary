@@ -25,7 +25,7 @@ namespace ApiaryEngine
         {
             List<Hive> hives = new();
 
-            for (int i = 1; i < 2; i++) // пока 5. больше 10 нельзя
+            for (int i = 1; i < 5; i++) // пока 5. больше 10 нельзя
             {
                 var hive = new Hive(i);
 
@@ -35,7 +35,7 @@ namespace ApiaryEngine
 
                // var guardBee = new GuardBee(hive);
 
-                for (int j = 0; j < 1; j++)
+                for (int j = 0; j < 3; j++)
                 {
                     var bee = new WorkerBee(i);
                     actors.Add(bee);
@@ -55,7 +55,7 @@ namespace ApiaryEngine
 
             // actors.Add(beeKeeper);
 
-            var _timer = new PeriodicTimer(TimeSpan.FromMilliseconds(500));
+            var _timer = new PeriodicTimer(TimeSpan.FromMilliseconds(100));
 
             while(await _timer.WaitForNextTickAsync(_cts))
             {
