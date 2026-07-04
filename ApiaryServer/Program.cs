@@ -17,7 +17,7 @@ app.UseAuthorization();
 
 app.MapControllers();
 
-var apiaryEngine = new Engine();
+var apiaryEngine = new ApiarySimulationEngine();
 _ = Task.Run( () => apiaryEngine.Run());
 
 app.MapGet("api/ApiaryStates", (CancellationToken token) =>

@@ -4,10 +4,7 @@ using ApiaryEngine.Helpers;
 
 namespace ApiaryEngine.abstractions
 {
-    public interface IActorState
-    {
-
-    }
+    public interface IActorState {}
     public abstract class BeeState : IActorState
     {
         public int BeeId { get; init; }
@@ -41,7 +38,6 @@ namespace ApiaryEngine.abstractions
             Position = position;
 
             Console.WriteLine($"Пчелка {GetType().Name} (id = {BeeId}) теперь в координате {Position}");
-
         }
 
         public void Tick()
@@ -51,6 +47,7 @@ namespace ApiaryEngine.abstractions
             if (state.IsCompleted)
             {
                 state = state.NextState();
+
                 Console.WriteLine($"Пчелка {GetType().Name} (id = {BeeId}) перешла в состояние {state.GetType().Name}");
             }
         }

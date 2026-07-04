@@ -2,6 +2,6 @@
 using ApiaryEngine;
 
 
-Engine engine = new();
+ApiarySimulationEngine engine = new();
 
 await engine.Run();

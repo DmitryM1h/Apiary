@@ -20,9 +20,15 @@ namespace ApiaryEngine.Domain.Bees.WorkerBee
     {
         public int CollectedHoney { get; private set; }
 
+        public const int HoneyCapacity = 30;
         public WorkerBee(int hiveId) : base(hiveId)
         {
             base.state = new WaitingState(this);
+        }
+
+        public void AddHoney(int honeyAmount)
+        {
+            CollectedHoney += honeyAmount;
         }
 
         public IActorState GetState()
@@ -34,8 +40,7 @@ namespace ApiaryEngine.Domain.Bees.WorkerBee
                 CollectedHoney = this.CollectedHoney,
                 Position = this.Position,
                 state = this.state.GetType().Name
-                
-
+         
             };
         }
     }

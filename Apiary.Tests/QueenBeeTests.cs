@@ -14,7 +14,7 @@ namespace Apiary.Tests
 
             var bee = new QueenBee(hive);
 
-            Assert.Equal(typeof(WaitingState), bee.State.GetType());
+            Assert.Equal(typeof(WaitingState), bee.GetType());
 
             await Task.Delay(TimeSpan.FromSeconds(QueenBee._secondsToTryProduce));
 

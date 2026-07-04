@@ -6,7 +6,7 @@ using System.Threading.Channels;
 
 namespace ApiaryEngine
 {
-    public class Engine
+    public class ApiarySimulationEngine
     {
         private readonly CancellationToken _cts;
 
@@ -16,7 +16,7 @@ namespace ApiaryEngine
 
         public ChannelReader<IActorState> _stateReader => _statesBus.Reader;
 
-        public Engine(CancellationToken cts = default)
+        public ApiarySimulationEngine(CancellationToken cts = default)
         {
             _cts = cts;
         }
@@ -68,8 +68,6 @@ namespace ApiaryEngine
                     await _statesBus.Writer.WriteAsync(actorState);
                 }
             }
-
-     
 
         }
     }

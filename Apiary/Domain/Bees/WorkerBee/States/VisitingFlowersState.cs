@@ -9,12 +9,14 @@ namespace ApiaryEngine.Domain.Bees.WorkerBee.States
         public bool IsCompleted { get; set; }
 
         WorkerBee BeeContext;
+
+        Flower? flower;
+
         IEnumerator<Point> _routeToFlower;
         public VisitingFlowersState(WorkerBee _context)
         {
             BeeContext = _context;
-            _routeToFlower = RouteToRandomFlower(BeeContext.Position)
-                            .GetEnumerator();
+            _routeToFlower = RouteToRandomFlower(BeeContext.Position);
         }
 
         public void Act()
@@ -28,7 +30,6 @@ namespace ApiaryEngine.Domain.Bees.WorkerBee.States
             var newPosition = _routeToFlower.Current;
 
             BeeContext.UpdatePosition(newPosition);
-
         }
 
         public IState NextState()
@@ -58,7 +59,7 @@ namespace ApiaryEngine.Domain.Bees.WorkerBee.States
             return Apiary.FindFlower(closestFlowerId)!;
         }
 
-        private IEnumerable<Point> RouteToRandomFlower(Point initialPosition)
+        private IEnumerator<Point> RouteToRandomFlower(Point initialPosition)
         {
             var (flower, destinationPosition) = GetRandomFlower();
 
@@ -85,8 +86,9 @@ namespace ApiaryEngine.Domain.Bees.WorkerBee.States
                 }
                 currentPosition = new Point(x, y);
                 yield return currentPosition;
-
             }
+
+            this.flower = flower;
         }
 
         public static (Flower flower, Point position) GetRandomFlower()

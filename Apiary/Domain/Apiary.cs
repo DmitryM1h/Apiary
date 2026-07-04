@@ -3,7 +3,18 @@
 namespace ApiaryEngine.Domain
 {
     public readonly record struct Point(int X, int Y);
-    public record class Flower(int Id, int HoneyAmount = 100);
+    public record class Flower(int Id)
+    {
+        public int HoneyAmount { get; private set; } = 100;
+        public int GetHoney(int honeyAmount)
+        {
+            if (honeyAmount > HoneyAmount)
+                throw new ArgumentException("Not enough honey");
+            HoneyAmount -= honeyAmount;
+            return honeyAmount;
+
+        }
+    }
     public static class Apiary
     {
         private static int Length = 100;
@@ -49,26 +60,26 @@ namespace ApiaryEngine.Domain
 
         private static Dictionary<int, Flower> _flowers = new Dictionary<int, Flower>
         {
-            { 0, new Flower(0, 100) },
-            { 1, new Flower(1, 100) },
-            { 2, new Flower(2, 100) },
-            { 3, new Flower(3, 100) },
-            { 4, new Flower(4, 100) },
-            { 5, new Flower(5, 100) },
-            { 6, new Flower(6, 100) },
-            { 7, new Flower(7, 100) },
-            { 8, new Flower(8, 100) },
-            { 9, new Flower(9, 100) },
-            { 10, new Flower(10, 100) },
-            { 11, new Flower(11, 100) },
-            { 12, new Flower(12, 100) },
-            { 13, new Flower(13, 100) },
-            { 14, new Flower(14, 100) },
-            { 15, new Flower(15, 100) },
-            { 16, new Flower(16, 100) },
-            { 17, new Flower(17, 100) },
-            { 18, new Flower(18, 100) },
-            { 19, new Flower(19, 100) }
+            { 0, new Flower(0) },
+            { 1, new Flower(1) },
+            { 2, new Flower(2) },
+            { 3, new Flower(3) },
+            { 4, new Flower(4) },
+            { 5, new Flower(5) },
+            { 6, new Flower(6) },
+            { 7, new Flower(7) },
+            { 8, new Flower(8) },
+            { 9, new Flower(9) },
+            { 10, new Flower(10) },
+            { 11, new Flower(11) },
+            { 12, new Flower(12) },
+            { 13, new Flower(13) },
+            { 14, new Flower(14) },
+            { 15, new Flower(15) },
+            { 16, new Flower(16) },
+            { 17, new Flower(17) },
+            { 18, new Flower(18) },
+            { 19, new Flower(19) }
         };
 
         public static IReadOnlyDictionary<int, Point> HivePositions => _hivePositions.AsReadOnly();

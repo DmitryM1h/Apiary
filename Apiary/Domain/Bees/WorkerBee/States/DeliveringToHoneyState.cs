@@ -15,8 +15,7 @@ namespace ApiaryEngine.Domain.Bees.WorkerBee.States
         public DeliveringToHoneyState(WorkerBee context)
         {
             _context = context;
-            _routeToHome = RouteToHome(_context.Position)
-                          .GetEnumerator();
+            _routeToHome = RouteToHome(_context.Position);
         }
         // TODO Летит в свой улей, но может перепутать с каким то шансом
         public void Act()
@@ -32,7 +31,7 @@ namespace ApiaryEngine.Domain.Bees.WorkerBee.States
             _context.UpdatePosition(newPosition);
         }
 
-        private IEnumerable<Point> RouteToHome(Point initialPosition)
+        private IEnumerator<Point> RouteToHome(Point initialPosition)
         {
             var destinationPosition = Apiary.HivePositions[_context.HiveId];
 
