@@ -74,7 +74,7 @@ namespace ApiaryEngine.Domain.Bees.WorkerBee.States
             {
                 int x = currentPosition.X + stepX;
                 int y = currentPosition.Y + stepY;
-                if ((y > destinationPosition.Y && stepX == 1) || (y < destinationPosition.Y && stepX == -1))
+                if ((y > destinationPosition.Y && stepY == 1) || (y < destinationPosition.Y && stepY == -1))
                 {
                     y = destinationPosition.Y;
                     stepY = 0;
