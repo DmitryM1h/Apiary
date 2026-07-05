@@ -1,61 +1,60 @@
 <template>
-
     <div class="gameMap">
-        <Bee v-for="bee in bees" :style="{
-            left: bee.positionX + 'px',
-            top: bee.positionY + 'px'
-        }" :key="bee.beeId"></Bee>
+        <Bee v-for="bee in bees" :key="bee.beeId" :x="bee.positionX" :y="bee.positionY" :id="bee.beeId" />
     </div>
-
 </template>
 
 <script setup>
 import { ref, onMounted } from 'vue'
-import Bee from './Bee.vue';
+import Bee from './Bee.vue'
 
 const bees = ref([])
-
-let sseListner = null;
+let sseListener = null
 
 onMounted(() => {
+    sseListener = new EventSource('https://localhost:7257/api/ApiaryStates')
 
-    sseListner = new EventSource('https://localhost:7257/api/ApiaryStates')
+    sseListener.onmessage = (event) => {
+        const data = JSON.parse(event.data)
+        addOrUpdateBee(data)
 
-    sseListner.onmessage = (sdata) => {
-        let val = JSON.parse(sdata.data);
-        console.log(val)
-        AddOrUpdate(val);
     }
-});
+})
 
-function AddOrUpdate(item) {
 
-    let beeId = item.beeId;
-    let posX = item.position.x;
-    let posY = item.position.y;
 
-    let bee = bees.value.find(item => item.beeId === beeId);
-    if (bee) {
-        bee.positionX = posX
-        bee.positionY = posY
+function addOrUpdateBee(item) {
+    const index = bees.value.findIndex(b => b.beeId === item.beeId)
+
+    const minX = 0, maxX = 100
+    const minY = 0, maxY = 100
+
+    const screenX = ((item.position.x - minX) / (maxX - minX)) * 1200
+    const screenY = 800 - ((item.position.y - minY) / (maxY - minY)) * 900
+
+    if (index !== -1) {
+        bees.value[index].positionX = screenX
+        bees.value[index].positionY = screenY
+    } else {
+        bees.value.push({
+            beeId: item.beeId,
+            positionX: screenX,
+            positionY: screenY
+        })
     }
-    else {
-        let bee = {
-            beeId: beeId,
-            positionX: posX,
-            positionY: posY,
-        }
-        bees.value.push(bee);
-    }
-
 }
-
 </script>
 
 <style scoped>
 .gameMap {
     background-color: rgb(5, 139, 50);
     width: 1200px;
-    height: 800px;
+    height: 900px;
+    position: relative;
+    overflow: hidden;
+    margin: 0 auto;
+    border: 3px solid #333;
+    border-radius: 8px;
+    margin-left: 50px;
 }
 </style>

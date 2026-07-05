@@ -40,7 +40,6 @@ namespace ApiaryEngine.Domain.Bees.WorkerBee
                 CollectedHoney = this.CollectedHoney,
                 Position = this.Position,
                 state = this.state.GetType().Name
-         
             };
         }
     }
