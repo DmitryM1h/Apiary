@@ -1,6 +1,7 @@
 ﻿using ApiaryEngine.abstractions;
 using ApiaryEngine.Abstractions;
 using ApiaryEngine.Domain;
+using ApiaryEngine.Domain.Bees.QueenBee;
 using ApiaryEngine.Domain.Bees.WorkerBee;
 using System.Threading.Channels;
 
@@ -23,15 +24,15 @@ namespace ApiaryEngine
 
         public async Task Run()
         {
-            List<Hive> hives = new();
+            List<Hive> hives = [];
 
             for (int i = 1; i < 5; i++) // пока 5. больше 10 нельзя
             {
                 var hive = new Hive(i);
 
-                //var queenBee = new QueenBee(hive);
+                var queenBee = new QueenBee(hive);
 
-                List<WorkerBee> workers = new();
+                List<WorkerBee> workers = [];
 
                // var guardBee = new GuardBee(hive);
 
@@ -43,7 +44,7 @@ namespace ApiaryEngine
 
                 hives.Add(hive);
 
-               // actors.Add(queenBee);
+                actors.Add(queenBee);
                 //actors.Add(guardBee);
             }
 
@@ -55,6 +56,7 @@ namespace ApiaryEngine
 
             // actors.Add(beeKeeper);
 
+            
             var _timer = new PeriodicTimer(TimeSpan.FromMilliseconds(100));
 
             while(await _timer.WaitForNextTickAsync(_cts))
@@ -63,12 +65,31 @@ namespace ApiaryEngine
                 {
                     actors[i].Tick();
 
+                    var actorsEvents = ActorsEvents.GetEvents();
+
                     var actorState = actors[i].GetState();
+
+                    HandleEvents(actorsEvents);
 
                     await _statesBus.Writer.WriteAsync(actorState);
                 }
             }
 
+        }
+
+        public void HandleEvents(IEnumerable<IEvent> events)
+        {
+            foreach(var @event in events)
+            {
+                switch(@event)
+                {
+                    case BeeWasBornEvent ev:
+                        actors.Add(new WorkerBee(ev.HiveId));
+                        break;
+                        
+
+                }
+            }
         }
     }
 }

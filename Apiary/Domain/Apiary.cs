@@ -5,14 +5,38 @@ namespace ApiaryEngine.Domain
     public readonly record struct Point(int X, int Y);
     public record class Flower(int Id)
     {
-        public int HoneyAmount { get; private set; } = 100;
+        public int NectarAmount { get; private set; } = 100;
         public int GetHoney(int honeyAmount)
         {
-            if (honeyAmount > HoneyAmount)
+            if (honeyAmount > NectarAmount)
                 throw new ArgumentException("Not enough honey");
-            HoneyAmount -= honeyAmount;
-            return honeyAmount;
+            NectarAmount -= honeyAmount;
 
+            if (NectarAmount == 0)
+            {
+                _isRefreshing = true;
+                Task.Run(async () =>
+                {
+                    try
+                    {
+                        await Task.Delay(10000);
+                        Refresh();
+                    }
+                    catch (Exception ex)
+                    {
+                        Console.WriteLine("Critical Exception while refreshing flower");
+                    }
+                });
+            }
+
+            return honeyAmount;
+        }
+        private bool _isRefreshing = false;
+        private void Refresh()
+        {
+            NectarAmount = 50;
+            _isRefreshing = false;
+            Console.WriteLine($"Flower has been refreshed (id = {Id})");
         }
     }
     public static class Apiary

@@ -7,9 +7,21 @@ using ApiaryEngine.Helpers;
 
 namespace ApiaryEngine.Domain.Bees.QueenBee
 {
+
+    public class WorkerBeeState : BeeState
+    {
+        public int CollectedHoney { get; init; }
+
+        public override string ToString()
+        {
+            return base.ToString() + $" honey: {CollectedHoney}";
+        }
+
+    }
+
     public class QueenBee : Bee, IActor
     {
-        public const int _amountOfHoneyToBornBee = 1000;
+        public const int _amountOfHoneyToBornBee = 50;
 
         public const int _secondsToTryProduce = 10;
         public Hive _hive { get; set; }
@@ -24,7 +36,13 @@ namespace ApiaryEngine.Domain.Bees.QueenBee
 
         public IActorState GetState()
         {
-            throw new NotImplementedException();
+            return new BeeState 
+            {
+                BeeId = this.BeeId,
+                HiveId = this.HiveId,
+                Position = this.Position,
+                state = this.state.GetType().Name
+            };
         }
     }
 

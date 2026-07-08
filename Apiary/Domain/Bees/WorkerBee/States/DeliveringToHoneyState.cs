@@ -65,7 +65,7 @@ namespace ApiaryEngine.Domain.Bees.WorkerBee.States
 
         public IState NextState()
         {
-            return new WaitingState(_context);
+            return new ProducingHoneyState(_context);
         }
     }
 }

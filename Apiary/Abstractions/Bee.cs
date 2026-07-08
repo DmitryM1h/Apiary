@@ -5,7 +5,7 @@ using ApiaryEngine.Helpers;
 namespace ApiaryEngine.abstractions
 {
     public interface IActorState {}
-    public abstract class BeeState : IActorState
+    public class BeeState : IActorState
     {
         public int BeeId { get; init; }
         public int HiveId { get; init; }

@@ -18,17 +18,31 @@ namespace ApiaryEngine.Domain.Bees.WorkerBee
     }
     public class WorkerBee : Bee, IActor
     {
-        public int CollectedHoney { get; private set; }
+        public int CollectedNectar { get; private set; }
 
-        public const int HoneyCapacity = 30;
+        public const int NectarCapacity = 30;
+        public int producedHoney;
         public WorkerBee(int hiveId) : base(hiveId)
         {
             base.state = new WaitingState(this);
         }
 
-        public void AddHoney(int honeyAmount)
+        public void AddNectar(int nectarAmount)
         {
-            CollectedHoney += honeyAmount;
+            CollectedNectar += nectarAmount;
+        }
+
+        public void ProduceHoney()
+        {
+            CollectedNectar-= 1;
+            producedHoney += 1;
+        }
+
+        public int GetHoney()
+        {
+            var honeyToReturn = producedHoney;
+            producedHoney = 0;
+            return honeyToReturn;
         }
 
         public IActorState GetState()
@@ -37,7 +51,7 @@ namespace ApiaryEngine.Domain.Bees.WorkerBee
             {
                 BeeId = this.BeeId,
                 HiveId = this.HiveId,
-                CollectedHoney = this.CollectedHoney,
+                CollectedHoney = this.CollectedNectar,
                 Position = this.Position,
                 state = this.state.GetType().Name
             };

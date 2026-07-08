@@ -7,9 +7,6 @@ namespace ApiaryEngine.Domain.Bees.WorkerBee.States;
 public class ProducingHoneyState : IState
 {
 
-    private const int _secondsToProduce = 10;
-
-    public DateTime? _finishDate;
     public bool IsCompleted { get; set; } = false;
 
     WorkerBee _context;
@@ -17,18 +14,21 @@ public class ProducingHoneyState : IState
     public ProducingHoneyState(WorkerBee context)
     {
         _context = context;
-
-        _finishDate = DateTime.Now.AddSeconds(_secondsToProduce);
     }
 
     public void Act()
     {
-        if (DateTime.Now >= _finishDate)
+        if(_context.CollectedNectar == 0)
         {
+            var hive = Apiary.FindHive(_context.HiveId);
+            hive!.IncreaseHoney(_context.BeeId, _context.GetHoney());
             IsCompleted = true;
+            return;
         }
-    }
 
+        _context.ProduceHoney();
+    }
+ 
     public IState NextState()
     {
         return new WaitingState(_context);

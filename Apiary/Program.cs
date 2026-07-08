@@ -4,4 +4,12 @@ using ApiaryEngine;
 
 ApiarySimulationEngine engine = new();
 
-await engine.Run();
+try
+{
+    await engine.Run();
+}
+catch
+{
+    var t = 2;
+}
+

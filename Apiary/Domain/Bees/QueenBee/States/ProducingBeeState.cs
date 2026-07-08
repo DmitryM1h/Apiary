@@ -1,4 +1,5 @@
 ﻿using ApiaryEngine.Abstractions;
+using ApiaryEngine.Domain.Bees.WorkerBee;
 
 namespace ApiaryEngine.Domain.Bees.QueenBee.States;
 
@@ -23,6 +24,10 @@ public class ProducingBeeState : IState
     {
         if(DateTime.Now >= _finishDate)
         {
+            ActorsEvents.EmitEvent(new BeeWasBornEvent(_context.HiveId));
+
+            Console.WriteLine("Новый workerBee!");
+
             IsCompleted = true;
         }
     }
