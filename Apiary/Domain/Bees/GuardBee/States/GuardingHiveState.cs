@@ -1,6 +1,5 @@
 ﻿using ApiaryEngine.Abstractions;
 using ApiaryEngine.Domain.Bees.GuardBeeStates;
-using System.Collections.Generic;
 
 namespace ApiaryEngine.Domain.Bees.States.GuardBeeStates
 {
@@ -30,12 +29,12 @@ namespace ApiaryEngine.Domain.Bees.States.GuardBeeStates
 
             var newPosition = _guardBeePath.Current;
 
-            var noiseX = (int)((new Random().NextDouble() - 0.5) * 1.5);
-            var noiseY = (int)((new Random().NextDouble() - 0.5) * 1.5);
+            var noiseX = (new Random().NextDouble() - 0.5) * 1.5;
+            var noiseY = (new Random().NextDouble() - 0.5) * 1.5;
 
             context.UpdatePosition(new Point(
-                (int)newPosition.X + noiseX,
-                (int)newPosition.Y + noiseY
+                newPosition.X + noiseX,
+                newPosition.Y + noiseY
             ));
 
 

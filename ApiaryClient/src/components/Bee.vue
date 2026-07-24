@@ -1,11 +1,9 @@
 <template>
-    <div class="bee" 
-         :style="{ left: x + 'px', top: y + 'px' }" 
-         :class="{ 
-             queen: isQueen, 
-             guard: isGuard,
-             worker: !isQueen && !isGuard 
-         }">
+    <div class="bee" :style="{ left: x + 'px', top: y + 'px' }" :class="{
+        queen: isQueen,
+        guard: isGuard,
+        worker: !isQueen && !isGuard
+    }">
         <span v-if="isQueen">🐝</span>
         <span v-else-if="isGuard">🐝</span>
         <span v-else>🐝</span>
@@ -59,14 +57,11 @@ defineProps({
 .bee.queen {
     font-size: 54px;
     z-index: 5;
-    animation: pulse 2s ease-in-out infinite;
 }
 
 .bee.guard {
     font-size: 48px;
     z-index: 3;
-    animation: guardPulse 1.5s ease-in-out infinite;
-    filter: drop-shadow(0 0 10px rgba(255, 165, 0, 0.5));
 }
 
 .bee.worker {
@@ -74,14 +69,21 @@ defineProps({
 }
 
 .beeId {
-    font-size: 14px;
+    position: absolute;
+    font-size: 11px;
     margin: 0;
-    background: rgba(0,0,0,0.5);
-    padding: 2px 6px;
-    border-radius: 10px;
+    background: rgba(0, 0, 0, 0.6);
+    padding: 1px 4px;
+    border-radius: 8px;
     color: white;
     white-space: nowrap;
-    margin-top: 40px;
+    top: 100%;
+    left: 50%;
+    transform: translateX(-50%);
+    margin-top: 2px;
+    font-weight: bold;
+    letter-spacing: 0.5px;
+    pointer-events: none;
 }
 
 .label {
@@ -97,23 +99,5 @@ defineProps({
 
 .guard-label {
     color: orange;
-    animation: blink 1s step-end infinite;
-}
-
-@keyframes pulse {
-    0% { transform: translate(-50%, -50%) scale(1); }
-    50% { transform: translate(-50%, -50%) scale(1.2); }
-    100% { transform: translate(-50%, -50%) scale(1); }
-}
-
-@keyframes guardPulse {
-    0% { transform: translate(-50%, -50%) scale(1) rotate(0deg); }
-    50% { transform: translate(-50%, -50%) scale(1.1) rotate(5deg); }
-    100% { transform: translate(-50%, -50%) scale(1) rotate(0deg); }
-}
-
-@keyframes blink {
-    0%, 100% { opacity: 1; }
-    50% { opacity: 0.3; }
 }
 </style>

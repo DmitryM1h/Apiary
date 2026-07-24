@@ -67,13 +67,13 @@ namespace ApiaryEngine.Domain.Bees.WorkerBee.States
 
             var currentPosition = initialPosition;
 
-            int stepX = initialPosition.X < destinationPosition.X ? 1 : -1;
-            int stepY = initialPosition.Y < destinationPosition.Y ? 1 : -1;
+            double stepX = initialPosition.X < destinationPosition.X ? 1 : -1;
+            double stepY = initialPosition.Y < destinationPosition.Y ? 1 : -1;
 
-            while(currentPosition != destinationPosition)
+            while(!currentPosition.Equals(destinationPosition))
             {
-                int x = currentPosition.X + stepX;
-                int y = currentPosition.Y + stepY;
+                double x = currentPosition.X + stepX;
+                double y = currentPosition.Y + stepY;
                 if ((y > destinationPosition.Y && stepY == 1) || (y < destinationPosition.Y && stepY == -1))
                 {
                     y = destinationPosition.Y;

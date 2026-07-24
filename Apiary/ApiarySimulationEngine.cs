@@ -1,6 +1,7 @@
 ﻿using ApiaryEngine.abstractions;
 using ApiaryEngine.Abstractions;
 using ApiaryEngine.Domain;
+using ApiaryEngine.Domain.BeeKeeper;
 using ApiaryEngine.Domain.Bees.GuardBeeStates;
 using ApiaryEngine.Domain.Bees.QueenBee;
 using ApiaryEngine.Domain.Bees.WorkerBee;
@@ -53,16 +54,22 @@ namespace ApiaryEngine
 
             Apiary.SetHives(hivesArr);
 
-            // var beeKeeper = new BeeKeeper(hivesArr);
+            var beeKeeper = new BeeKeeper(hivesArr);
 
-            // actors.Add(beeKeeper);
+            actors.Add(beeKeeper);
 
             
             var _timer = new PeriodicTimer(TimeSpan.FromMilliseconds(100));
 
             while(await _timer.WaitForNextTickAsync(_cts))
             {
-                for(int i = 0; i < actors.Count; i++)
+                var flowersStates = Apiary.Flowers.Values.Select(t => t.GetState());
+
+                foreach (var flowerState in flowersStates)
+                    await _statesBus.Writer.WriteAsync(flowerState);
+
+
+                for (int i = 0; i < actors.Count; i++)
                 {
                     actors[i].Tick();
 
@@ -73,6 +80,7 @@ namespace ApiaryEngine
                     await HandleEvents(actorsEvents);
 
                     await _statesBus.Writer.WriteAsync(actorState);
+
                 }
             }
 

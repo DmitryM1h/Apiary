@@ -13,7 +13,8 @@ namespace ApiaryEngine.abstractions
         WorkerBee = 1,
         QueenBee = 2,
         GuardBee = 3,
-        Flower = 4
+        Flower = 4,
+        BeeKeeper = 5,
        
     }
     public class BeeState : IActorState

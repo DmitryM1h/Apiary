@@ -1,19 +1,35 @@
 ﻿using ApiaryEngine.abstractions;
+using ApiaryEngine.Abstractions;
 using System.Linq.Expressions;
 
 namespace ApiaryEngine.Domain
 {
-    public class FlowerState
+    public class FlowerState : IActorState
     {
-        public readonly int FlowerId;
-        public readonly int NectarAmount;
+        public int FlowerId { get; set; }
+        public Point Position { get; set; }
+        public int NectarAmount { get; set; }
+        public ActorType ActorType { get; init; } = ActorType.Flower;
     }
-    public readonly record struct Point(int X, int Y);
+    public struct Point
+    {
+        public double X { get; set; }
+        public double Y { get; set; }
 
-    public record class Flower(int Id)
+        public Point(double x, double y)
+        {
+            X = x;
+            Y = y;
+        }
+
+
+    }
+    public record class Flower(int Id, Point position) : IActor
     {
         private volatile int _nectarAmount = 100;
         public int NectarAmount => _nectarAmount;
+        public Point Position { get; set; } = position;
+
         public int GetHoney(int honeyAmount)
         {
             if (honeyAmount > NectarAmount)
@@ -46,6 +62,16 @@ namespace ApiaryEngine.Domain
                     Console.WriteLine("Critical Exception while refreshing flower");
                 }
             });
+        }
+
+        public void Tick()
+        {
+            throw new NotImplementedException();
+        }
+
+        public IActorState GetState()
+        {
+            return new FlowerState() { FlowerId = Id, Position = Position, NectarAmount = _nectarAmount };
         }
     }
     public static class Apiary
@@ -90,29 +116,28 @@ namespace ApiaryEngine.Domain
         };
 
         private static Dictionary<int, Flower> _flowers = new Dictionary<int, Flower>
-        {
-            { 0, new Flower(0) },
-            { 1, new Flower(1) },
-            { 2, new Flower(2) },
-            { 3, new Flower(3) },
-            { 4, new Flower(4) },
-            { 5, new Flower(5) },
-            { 6, new Flower(6) },
-            { 7, new Flower(7) },
-            { 8, new Flower(8) },
-            { 9, new Flower(9) },
-            { 10, new Flower(10) },
-            { 11, new Flower(11) },
-            { 12, new Flower(12) },
-            { 13, new Flower(13) },
-            { 14, new Flower(14) },
-            { 15, new Flower(15) },
-            { 16, new Flower(16) },
-            { 17, new Flower(17) },
-            { 18, new Flower(18) },
-            { 19, new Flower(19) }
-        };
-
+{
+    { 0, new Flower(0, _flowerPositions[0]) },
+    { 1, new Flower(1, _flowerPositions[1]) },
+    { 2, new Flower(2, _flowerPositions[2]) },
+    { 3, new Flower(3, _flowerPositions[3]) },
+    { 4, new Flower(4, _flowerPositions[4]) },
+    { 5, new Flower(5, _flowerPositions[5]) },
+    { 6, new Flower(6, _flowerPositions[6]) },
+    { 7, new Flower(7, _flowerPositions[7]) },
+    { 8, new Flower(8, _flowerPositions[8]) },
+    { 9, new Flower(9, _flowerPositions[9]) },
+    { 10, new Flower(10, _flowerPositions[10]) },
+    { 11, new Flower(11, _flowerPositions[11]) },
+    { 12, new Flower(12, _flowerPositions[12]) },
+    { 13, new Flower(13, _flowerPositions[13]) },
+    { 14, new Flower(14, _flowerPositions[14]) },
+    { 15, new Flower(15, _flowerPositions[15]) },
+    { 16, new Flower(16, _flowerPositions[16]) },
+    { 17, new Flower(17, _flowerPositions[17]) },
+    { 18, new Flower(18, _flowerPositions[18]) },
+    { 19, new Flower(19, _flowerPositions[19]) }
+};
         public static IReadOnlyDictionary<int, Point> HivePositions => _hivePositions.AsReadOnly();
         public static IReadOnlyDictionary<int, Point> FlowerPositions => _flowerPositions.AsReadOnly();
         public static IReadOnlyDictionary<int, Flower> Flowers => _flowers.AsReadOnly();
@@ -132,6 +157,11 @@ namespace ApiaryEngine.Domain
         public static Flower? FindFlower(int flowerId)
         {
             return _flowers.TryGetValue(flowerId, out var flower) ? flower : null;
+        }
+
+        public static IEnumerable<Flower> GetAllFlowers()
+        {
+            return _flowers.Values;
         }
     }
 }
