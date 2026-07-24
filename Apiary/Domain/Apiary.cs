@@ -1,32 +1,28 @@
-﻿using System.Linq.Expressions;
+﻿using ApiaryEngine.abstractions;
+using System.Linq.Expressions;
 
 namespace ApiaryEngine.Domain
 {
+    public class FlowerState
+    {
+        public readonly int FlowerId;
+        public readonly int NectarAmount;
+    }
     public readonly record struct Point(int X, int Y);
+
     public record class Flower(int Id)
     {
-        public int NectarAmount { get; private set; } = 100;
+        private volatile int _nectarAmount = 100;
+        public int NectarAmount => _nectarAmount;
         public int GetHoney(int honeyAmount)
         {
             if (honeyAmount > NectarAmount)
                 throw new ArgumentException("Not enough honey");
-            NectarAmount -= honeyAmount;
+            _nectarAmount -= honeyAmount;
 
-            if (NectarAmount == 0)
+            if (NectarAmount == 0 && _isRefreshing == false)
             {
-                _isRefreshing = true;
-                Task.Run(async () =>
-                {
-                    try
-                    {
-                        await Task.Delay(10000);
-                        Refresh();
-                    }
-                    catch (Exception ex)
-                    {
-                        Console.WriteLine("Critical Exception while refreshing flower");
-                    }
-                });
+                Refresh();
             }
 
             return honeyAmount;
@@ -34,15 +30,26 @@ namespace ApiaryEngine.Domain
         private bool _isRefreshing = false;
         private void Refresh()
         {
-            NectarAmount = 50;
-            _isRefreshing = false;
-            Console.WriteLine($"Flower has been refreshed (id = {Id})");
+            _isRefreshing = true;
+            Task.Run(async () =>
+            {
+                try
+                {
+                    await Task.Delay(10000);
+                    _nectarAmount = 50;
+                    _isRefreshing = false;
+                    ActorsEvents.EmitEvent(new FlowerRefreshedEvent(Id, NectarAmount));
+                    Console.WriteLine($"Flower has been refreshed (id = {Id})");
+                }
+                catch (Exception ex)
+                {
+                    Console.WriteLine("Critical Exception while refreshing flower");
+                }
+            });
         }
     }
     public static class Apiary
     {
-        private static int Length = 100;
-        private static int Width = 100;
 
         private static Dictionary<int, Point> _hivePositions = new Dictionary<int, Point>
         {

@@ -20,7 +20,7 @@ namespace Apiary.Tests
 
             bee.Tick();
 
-            Assert.Equal(typeof(CollectingHoneyState), bee.State.GetType());
+            Assert.Equal(typeof(CollectingHoneyState), bee.GetState().GetType());
 
         }
     }

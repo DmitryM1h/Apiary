@@ -1,6 +1,7 @@
 ﻿using ApiaryEngine.abstractions;
 using ApiaryEngine.Abstractions;
 using ApiaryEngine.Domain;
+using ApiaryEngine.Domain.Bees.GuardBeeStates;
 using ApiaryEngine.Domain.Bees.QueenBee;
 using ApiaryEngine.Domain.Bees.WorkerBee;
 using System.Threading.Channels;
@@ -34,7 +35,7 @@ namespace ApiaryEngine
 
                 List<WorkerBee> workers = [];
 
-               // var guardBee = new GuardBee(hive);
+                var guardBee = new GuardBee(hive);
 
                 for (int j = 0; j < 3; j++)
                 {
@@ -45,7 +46,7 @@ namespace ApiaryEngine
                 hives.Add(hive);
 
                 actors.Add(queenBee);
-                //actors.Add(guardBee);
+                actors.Add(guardBee);
             }
 
             var hivesArr = hives.ToArray();
@@ -65,11 +66,11 @@ namespace ApiaryEngine
                 {
                     actors[i].Tick();
 
-                    var actorsEvents = ActorsEvents.GetEvents();
+                    var actorsEvents = ActorsEvents.ReadEvents();
 
                     var actorState = actors[i].GetState();
 
-                    HandleEvents(actorsEvents);
+                    await HandleEvents(actorsEvents);
 
                     await _statesBus.Writer.WriteAsync(actorState);
                 }
@@ -77,7 +78,7 @@ namespace ApiaryEngine
 
         }
 
-        public void HandleEvents(IEnumerable<IEvent> events)
+        public async Task HandleEvents(IEnumerable<IEvent> events)
         {
             foreach(var @event in events)
             {
@@ -86,7 +87,10 @@ namespace ApiaryEngine
                     case BeeWasBornEvent ev:
                         actors.Add(new WorkerBee(ev.HiveId));
                         break;
-                        
+
+                    //case FlowerRefreshedEvent ev:
+                    //    await _statesBus.Writer.WriteAsync(ev);
+                    //    break;
 
                 }
             }

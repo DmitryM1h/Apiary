@@ -24,7 +24,7 @@ namespace ApiaryEngine.Domain.Bees.WorkerBee
         public int producedHoney;
         public WorkerBee(int hiveId) : base(hiveId)
         {
-            base.state = new WaitingState(this);
+            base.State = new WaitingState(this);
         }
 
         public void AddNectar(int nectarAmount)
@@ -53,7 +53,8 @@ namespace ApiaryEngine.Domain.Bees.WorkerBee
                 HiveId = this.HiveId,
                 CollectedHoney = this.CollectedNectar,
                 Position = this.Position,
-                state = this.state.GetType().Name
+                state = this.State.GetType().Name,
+                ActorType = ActorType.WorkerBee
             };
         }
     }

@@ -1,7 +1,6 @@
 ﻿using ApiaryEngine.Abstractions;
 using ApiaryEngine.Domain.Bees.GuardBeeStates;
-
-
+using System.Collections.Generic;
 
 namespace ApiaryEngine.Domain.Bees.States.GuardBeeStates
 {
@@ -10,9 +9,10 @@ namespace ApiaryEngine.Domain.Bees.States.GuardBeeStates
         public bool IsCompleted { get; set; } = false;
 
         private GuardBee context;
-
-        IEnumerator<(double X, double Y)> _guardBeePath;
         private Point hivePosition;
+        private IEnumerator<(double X, double Y)> _guardBeePath;
+        private bool _isFirstRun = true;
+
         public GuardingHiveState(GuardBee context)
         {
             this.context = context;
@@ -22,128 +22,105 @@ namespace ApiaryEngine.Domain.Bees.States.GuardBeeStates
 
         public void Act()
         {
-            // TODO проверить что чужая пчела в радиусе не своего улья
-
             if (!_guardBeePath.MoveNext())
             {
-                //IsCompleted = true;
-                _guardBeePath.Dispose();
-                return;
+                _guardBeePath = GuardBeeRoute();
+                _guardBeePath.MoveNext();
             }
+
             var newPosition = _guardBeePath.Current;
 
-            context.UpdatePosition(new Point((int)newPosition.X, (int)newPosition.Y));
+            var noiseX = (int)((new Random().NextDouble() - 0.5) * 1.5);
+            var noiseY = (int)((new Random().NextDouble() - 0.5) * 1.5);
+
+            context.UpdatePosition(new Point(
+                (int)newPosition.X + noiseX,
+                (int)newPosition.Y + noiseY
+            ));
+
+
         }
 
         public IState NextState()
         {
-            throw new NotImplementedException();
+            return this;
         }
 
-
-
-        private IEnumerator<(double X, double Y)>? _routeAroundHive;
-        public IEnumerator<(double X, double Y)> GuardBeeRoute()
+        private IEnumerator<(double X, double Y)> GuardBeeRoute()
         {
-            _routeAroundHive = RouteAroundHive(hivePosition);
             var routetoradius = RouteToRadius(context.Position);
-            
-            while(routetoradius.MoveNext())
+
+            while (routetoradius.MoveNext())
             {
                 yield return routetoradius.Current;
             }
 
             var routeAroundHive = RouteAroundHive(hivePosition);
 
-            while(routeAroundHive.MoveNext())
+            while (routeAroundHive.MoveNext())
             {
                 yield return routeAroundHive.Current;
             }
         }
+
         private static IEnumerator<(double X, double Y)> RouteAroundHive(Point hivePosition)
         {
             const int radius = 5;
-            const double step = 0.1;
-            int stepNumber = 10;
+            const double step = 0.5;
+            int stepsPerUnit = 2;
 
-            var xCoords = Enumerable.Range(hivePosition.X - radius, 2 * radius + 1)
-                         .SelectMany(t =>
-                         {
-                             List<double> seqs = [];
-                             for (int i = 0; i <= stepNumber; i++)
-                             {
-                                 seqs.Add(t + i * step);
-                             }
-                             return seqs;
-                         });
+            var points = new List<(double X, double Y)>();
 
-            var yCoords = Enumerable.Range(hivePosition.Y - radius, 2 * radius + 1)
-                                           .SelectMany(t =>
-                                           {
-                                               List<double> seqs = [];
-                                               for (int i = 0; i <= stepNumber; i++)
-                                               {
-                                                   seqs.Add(t + i * step);
-                                               }
-                                               return seqs;
-                                           });
-
-            const double epsilon = 2;
-
-            var circleCoords = from x in xCoords
-                               from y in yCoords
-                               where Math.Abs((x - hivePosition.X) * (x - hivePosition.X) +
-                               (y - hivePosition.Y) * (y - hivePosition.Y) - radius * radius) < epsilon
-                               select (x, y);
-
-            var deb = circleCoords.ToList();
-            var d1 = xCoords.ToList();
-            var d2 = yCoords.ToList();
-
-            var route = circleCoords.GetEnumerator();
-
-            while(true)
+            for (double angle = 0; angle < 2 * Math.PI; angle += 0.1)
             {
-                if(route.MoveNext())
+                double x = hivePosition.X + radius * Math.Cos(angle);
+                double y = hivePosition.Y + radius * Math.Sin(angle);
+                points.Add((x, y));
+            }
+
+            while (true)
+            {
+                foreach (var point in points)
                 {
-                    yield return route.Current;
-                }
-                else
-                {
-                    route.Reset();
+                    yield return point;
                 }
             }
         }
 
         private IEnumerator<(double X, double Y)> RouteToRadius(Point initialPosition)
         {
-            _routeAroundHive!.MoveNext();
+            var firstPoint = GetFirstPointOnCircle(hivePosition);
 
-            var destinationPosition = _routeAroundHive.Current;
+            double x = initialPosition.X;
+            double y = initialPosition.Y;
 
-            (double X, double Y) currentPosition = (initialPosition.X, initialPosition.Y);
+            double dx = firstPoint.X - x;
+            double dy = firstPoint.Y - y;
+            double distance = Math.Sqrt(dx * dx + dy * dy);
 
-            int stepX = initialPosition.X < destinationPosition.X ? 1 : -1;
-            int stepY = initialPosition.Y < destinationPosition.Y ? 1 : -1;
-
-            while (currentPosition != destinationPosition)
+            if (distance < 0.1)
             {
-                double x = currentPosition.X + stepX;
-                double y = currentPosition.Y + stepY;
-                if ((y > destinationPosition.Y && stepY == 1) || (y < destinationPosition.Y && stepY == -1))
-                {
-                    y = destinationPosition.Y;
-                    stepY = 0;
-                }
-                if ((x > destinationPosition.X && stepX == 1) || (x < destinationPosition.X && stepX == -1))
-                {
-                    x = destinationPosition.X;
-                    stepX = 0;
-                }
-                currentPosition = (x, y);
-                yield return currentPosition;
+                yield return firstPoint;
+                yield break;
             }
 
+            int steps = (int)(distance * 2);
+            for (int i = 1; i <= steps; i++)
+            {
+                double t = (double)i / steps;
+                yield return (
+                    x + dx * t,
+                    y + dy * t
+                );
+            }
+
+            yield return firstPoint;
+        }
+
+        private (double X, double Y) GetFirstPointOnCircle(Point hivePosition)
+        {
+            const int radius = 5;
+            return (hivePosition.X + radius, hivePosition.Y);
         }
     }
 }

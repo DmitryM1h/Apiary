@@ -1,4 +1,5 @@
 using ApiaryEngine;
+using ApiaryEngine.Domain;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -14,7 +15,7 @@ builder.Services.AddCors(opt =>
 
     opt.AddPolicy("AllowVue", policy =>
     {
-        policy.WithOrigins("http://localhost:5173")
+        policy.WithOrigins("http://localhost:5175")
               .AllowAnyHeader()
               .AllowAnyMethod();
     });
@@ -45,5 +46,20 @@ app.MapGet("api/ApiaryStates", (CancellationToken token) =>
          return Results.Empty;
      }
  });
+
+app.MapGet("api/Flowers", (CancellationToken token) =>
+{
+
+    var response = from flower in Apiary.Flowers
+                   join flowerPos in Apiary.FlowerPositions on flower.Key equals flowerPos.Key
+                   select new
+                   {
+                       flowerId = flower.Key,
+                       position = flowerPos.Value,
+                       amountOfNectar = flower.Value.NectarAmount
+                   };
+
+    return response;
+});
 
 app.Run();

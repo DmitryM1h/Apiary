@@ -31,7 +31,7 @@ namespace ApiaryEngine.Domain.Bees.QueenBee
            
             _hive = hive;
 
-            base.state = new WaitingState(this);
+            base.State = new WaitingState(this);
         }
 
         public IActorState GetState()
@@ -41,7 +41,8 @@ namespace ApiaryEngine.Domain.Bees.QueenBee
                 BeeId = this.BeeId,
                 HiveId = this.HiveId,
                 Position = this.Position,
-                state = this.state.GetType().Name
+                state = this.State.GetType().Name,
+                ActorType = ActorType.QueenBee,
             };
         }
     }

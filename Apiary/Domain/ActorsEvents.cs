@@ -1,14 +1,12 @@
-﻿using System;
+﻿using ApiaryEngine.abstractions;
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Text;
 
 namespace ApiaryEngine.Domain
 {
-    public interface IEvent
-    {
-
-    }
+    public interface IEvent {}
     public static class ActorsEvents
     {
         private static List<IEvent> _events = [];
@@ -18,7 +16,7 @@ namespace ApiaryEngine.Domain
             _events.Add(@event);
         }
 
-        public static IEnumerable<IEvent> GetEvents()
+        public static IEnumerable<IEvent> ReadEvents()
         {
             var res = _events.ToList();
             _events.Clear();
@@ -28,6 +26,7 @@ namespace ApiaryEngine.Domain
 
 
     public record class BeeWasBornEvent(int HiveId) : IEvent;
+    public record class FlowerRefreshedEvent(int flowerId, int nectarAmount) : IEvent;
 
 
 }

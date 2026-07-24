@@ -16,10 +16,12 @@ namespace ApiaryEngine.Domain
             HiveId = hiveId;
         }
 
-        public int TryTakeHoney(int amount)
+        public bool TryTakeHoney(int amount, out int? honey)
         {
+            honey = null;
+
             if (amount > Honey)
-                return -1;
+                return false;
 
             int collectedHoney = 0;
             int remainingToTake = amount;
@@ -43,8 +45,8 @@ namespace ApiaryEngine.Domain
                         return oldValue;
                     });
             }
-
-            return collectedHoney;
+            honey = collectedHoney;
+            return true;
         }
 
         public void IncreaseHoney(int beeId, int amount)

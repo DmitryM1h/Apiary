@@ -4,13 +4,26 @@ using ApiaryEngine.Helpers;
 
 namespace ApiaryEngine.abstractions
 {
-    public interface IActorState {}
+    public interface IActorState 
+    {
+        public ActorType ActorType { get; init; }
+    }
+    public enum ActorType
+    {
+        WorkerBee = 1,
+        QueenBee = 2,
+        GuardBee = 3,
+        Flower = 4
+       
+    }
     public class BeeState : IActorState
     {
         public int BeeId { get; init; }
         public int HiveId { get; init; }
         public Point Position { get; init; }
         public string state { get; init; }
+
+        public ActorType ActorType { get; init; }
 
         public override string ToString()
         {
@@ -24,7 +37,7 @@ namespace ApiaryEngine.abstractions
         public int HiveId { get; init; }
         public Point Position { get; private set; }
 
-        protected IState state;
+        protected IState State;
 
         public Bee(int hiveId)
         {
@@ -42,13 +55,13 @@ namespace ApiaryEngine.abstractions
 
         public void Tick()
         {
-            state.Act();
+            State.Act();
 
-            if (state.IsCompleted)
+            if (State.IsCompleted)
             {
-                state = state.NextState();
+                State = State.NextState();
 
-                Console.WriteLine($"Пчелка {GetType().Name} (id = {BeeId}) перешла в состояние {state.GetType().Name}");
+                Console.WriteLine($"Пчелка {GetType().Name} (id = {BeeId}) перешла в состояние {State.GetType().Name}");
             }
         }
     }

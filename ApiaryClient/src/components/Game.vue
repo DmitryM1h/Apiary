@@ -1,10 +1,10 @@
 <template>
     <div class="gameMap">
-        <Bee v-for="bee in bees" :key="bee.beeId" :x="bee.positionX" :y="bee.positionY" :id="bee.beeId" />
+        <Bee v-for="bee in bees" :key="bee.beeId" :x="bee.positionX" :y="bee.positionY" :id="bee.beeId"
+            :isQueen="bee.isQueen" :isGuard="bee.isGuard" />
 
         <Flower v-for="flower in flowers" :key="flower.flowerId" :x="flower.positionX" :y="flower.positionY"
             :nectarAmount="flower.amountOfNectar"></Flower>
-
     </div>
 </template>
 
@@ -17,8 +17,15 @@ const bees = ref([])
 const flowers = ref([])
 let sseListener = null
 
-onMounted(() => {
+// Константы для типов
+const ACTOR_TYPES = {
+    WorkerBee: 1,
+    QueenBee: 2,
+    GuardBee: 3,
+    Flower: 4
+}
 
+onMounted(() => {
     renderFlowers();
 
     sseListener = new EventSource('https://localhost:7257/api/ApiaryStates')
@@ -29,8 +36,6 @@ onMounted(() => {
     }
 })
 
-
-
 function addOrUpdateBee(item) {
     const index = bees.value.findIndex(b => b.beeId === item.beeId)
 
@@ -38,47 +43,47 @@ function addOrUpdateBee(item) {
     let screenX = coords[0]
     let screenY = coords[1]
 
+    // Определяем тип пчелы
+    const isQueen = item.actorType === ACTOR_TYPES.QueenBee
+    const isGuard = item.actorType === ACTOR_TYPES.GuardBee
+
     if (index !== -1) {
         bees.value[index].positionX = screenX
         bees.value[index].positionY = screenY
+        bees.value[index].isQueen = isQueen
+        bees.value[index].isGuard = isGuard
     } else {
         bees.value.push({
             beeId: item.beeId,
             positionX: screenX,
-            positionY: screenY
+            positionY: screenY,
+            isQueen: isQueen,
+            isGuard: isGuard
         })
     }
 }
 
 async function renderFlowers() {
-    let res = await fetch("https://localhost:7257/api/Flowers");
-    console.log(res)
-    let flowersResult = await res.json();
+    try {
+        let res = await fetch("https://localhost:7257/api/Flowers");
+        let flowersResult = await res.json();
 
-    console.log(flowersResult)
+        for (let element of flowersResult) {
+            let coords = GetCoordinates(element.position.x, element.position.y)
+            let screenX = coords[0]
+            let screenY = coords[1]
 
-    for (let element of flowersResult) {
-        let coords = GetCoordinates(element.position.x, element.position.y)
-
-        let screenX = coords[0]
-        let screenY = coords[1]
-        console.log(coords)
-
-        flowers.value.push({
-            flowerId: element.flowerId,
-            positionX: screenX,
-            positionY: screenY,
-            amountOfNectar: element.amountOfNectar
-        })
-
-        console.log(flowers);
+            flowers.value.push({
+                flowerId: element.flowerId,
+                positionX: screenX,
+                positionY: screenY,
+                amountOfNectar: element.amountOfNectar
+            })
+        }
+    } catch (error) {
+        console.error('Error loading flowers:', error)
     }
 }
-
-function mapEventToHandler(event) {
-
-}
-
 
 function GetCoordinates(positionX, positionY) {
     const minX = 0, maxX = 100

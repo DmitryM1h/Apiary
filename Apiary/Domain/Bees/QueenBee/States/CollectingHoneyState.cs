@@ -20,15 +20,13 @@ namespace ApiaryEngine.Domain.Bees.QueenBee.States
         {
             var hive = Context._hive ?? throw new LostBeeException();
 
-            var honey = hive.TryTakeHoney(QueenBee._amountOfHoneyToBornBee);
-
-            if (honey == -1)
+            if (!hive.TryTakeHoney(QueenBee._amountOfHoneyToBornBee, out var honey))
             {
                 IsCompleted = true;
                 return;
             }
 
-            CollectedHoney = honey;
+            CollectedHoney = honey!.Value;
             IsCompleted = true;
 
         }
