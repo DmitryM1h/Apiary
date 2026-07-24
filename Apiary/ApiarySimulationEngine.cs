@@ -96,10 +96,6 @@ namespace ApiaryEngine
                         actors.Add(new WorkerBee(ev.HiveId));
                         break;
 
-                    //case FlowerRefreshedEvent ev:
-                    //    await _statesBus.Writer.WriteAsync(ev);
-                    //    break;
-
                 }
             }
         }

@@ -10,8 +10,6 @@ namespace ApiaryEngine.Domain.Bees.States.GuardBeeStates
         private GuardBee context;
         private Point hivePosition;
         private IEnumerator<(double X, double Y)> _guardBeePath;
-        private bool _isFirstRun = true;
-
         public GuardingHiveState(GuardBee context)
         {
             this.context = context;

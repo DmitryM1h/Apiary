@@ -15,7 +15,7 @@ builder.Services.AddCors(opt =>
 
     opt.AddPolicy("AllowVue", policy =>
     {
-        policy.WithOrigins("http://localhost:5173")
+        policy.WithOrigins("http://localhost:5175")
               .AllowAnyHeader()
               .AllowAnyMethod();
     });

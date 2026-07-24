@@ -7,7 +7,7 @@
             :nectarAmount="flower.nectarAmount" />
 
         <BeeKeeper v-if="beeKeeper" :x="beeKeeper.positionX" :y="beeKeeper.positionY"
-            :collectedHoney="beeKeeper.collectedHoney" />
+            :collectedHoney="beeKeeper.collectedHoney" :state="beeKeeper.state" />
     </div>
 </template>
 
@@ -74,13 +74,11 @@ function updateBeeKeeper(item) {
     let screenY = coords[1]
 
     if (beeKeeper.value) {
-        // Обновляем существующего пасечника
         beeKeeper.value.positionX = screenX
         beeKeeper.value.positionY = screenY
         beeKeeper.value.collectedHoney = item.collectedHoney || 0
         beeKeeper.value.state = item.state || ''
     } else {
-        // Создаем нового пасечника
         beeKeeper.value = {
             positionX: screenX,
             positionY: screenY,

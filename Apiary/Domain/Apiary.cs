@@ -1,6 +1,5 @@
 ﻿using ApiaryEngine.abstractions;
 using ApiaryEngine.Abstractions;
-using System.Linq.Expressions;
 
 namespace ApiaryEngine.Domain
 {
@@ -54,7 +53,6 @@ namespace ApiaryEngine.Domain
                     await Task.Delay(10000);
                     _nectarAmount = 50;
                     _isRefreshing = false;
-                    ActorsEvents.EmitEvent(new FlowerRefreshedEvent(Id, NectarAmount));
                     Console.WriteLine($"Flower has been refreshed (id = {Id})");
                 }
                 catch (Exception ex)
