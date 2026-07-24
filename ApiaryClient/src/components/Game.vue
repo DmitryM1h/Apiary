@@ -31,7 +31,6 @@ const ACTOR_TYPES = {
 }
 
 onMounted(() => {
-    renderFlowers();
 
     sseListener = new EventSource('https://localhost:7257/api/ApiaryStates')
 
@@ -142,28 +141,6 @@ function addOrUpdateBee(item) {
             isQueen: isQueen,
             isGuard: isGuard
         })
-    }
-}
-
-async function renderFlowers() {
-    try {
-        let res = await fetch("https://localhost:7257/api/Flowers");
-        let flowersResult = await res.json();
-
-        for (let element of flowersResult) {
-            let coords = GetCoordinates(element.position.x, element.position.y)
-            let screenX = coords[0]
-            let screenY = coords[1]
-
-            flowers.value.push({
-                flowerId: element.flowerId,
-                positionX: screenX,
-                positionY: screenY,
-                nectarAmount: element.amountOfNectar
-            })
-        }
-    } catch (error) {
-        console.error('Error loading flowers:', error)
     }
 }
 

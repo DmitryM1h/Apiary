@@ -32,6 +32,4 @@ namespace ApiaryEngine.Domain.BeeKeeper.States
             return this;
         }
     }
-
-   
 }

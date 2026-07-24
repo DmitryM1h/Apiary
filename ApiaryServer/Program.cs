@@ -15,7 +15,7 @@ builder.Services.AddCors(opt =>
 
     opt.AddPolicy("AllowVue", policy =>
     {
-        policy.WithOrigins("http://localhost:5175")
+        policy.WithOrigins("http://localhost:5173")
               .AllowAnyHeader()
               .AllowAnyMethod();
     });
@@ -47,19 +47,19 @@ app.MapGet("api/ApiaryStates", (CancellationToken token) =>
      }
  });
 
-app.MapGet("api/Flowers", (CancellationToken token) =>
-{
+//app.MapGet("api/Flowers", (CancellationToken token) =>
+//{
 
-    var response = from flower in Apiary.Flowers
-                   join flowerPos in Apiary.FlowerPositions on flower.Key equals flowerPos.Key
-                   select new
-                   {
-                       flowerId = flower.Key,
-                       position = flowerPos.Value,
-                       amountOfNectar = flower.Value.NectarAmount
-                   };
+//    var response = from flower in Apiary.Flowers
+//                   join flowerPos in Apiary.FlowerPositions on flower.Key equals flowerPos.Key
+//                   select new
+//                   {
+//                       flowerId = flower.Key,
+//                       position = flowerPos.Value,
+//                       amountOfNectar = flower.Value.NectarAmount
+//                   };
 
-    return response;
-});
+//    return response;
+//});
 
 app.Run();

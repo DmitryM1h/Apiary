@@ -9,7 +9,6 @@ public class CollectingHoneyState : IState
     private readonly BeeKeeper _context;
     private readonly Hive _hive;
     private IEnumerator<Point> _routeToHive;
-    private bool _hasCollected = false;
 
     public CollectingHoneyState(BeeKeeper context, Hive hive)
     {
@@ -35,23 +34,9 @@ public class CollectingHoneyState : IState
             }
         }
 
-        if (_routeToHive == null && !_hasCollected)
+        // Дошли до улья - переходим к процессу сбора
+        if (_routeToHive == null)
         {
-            _hasCollected = true;
-
-            var honeyToTake = Math.Max(1, _hive.Honey / 10);
-
-            if (honeyToTake > 0)
-            {
-                if (_hive.TryTakeHoney(honeyToTake, out int? honey))
-                {
-                    if (honey.HasValue && honey.Value > 0)
-                    {
-                        _context.CollectHoneyFromHive(honey.Value);
-                    }
-                }
-            }
-
             IsCompleted = true;
         }
     }
@@ -90,6 +75,7 @@ public class CollectingHoneyState : IState
 
     public IState NextState()
     {
-        return new ReturnToBaseState(_context);
+        // После того как дошли до улья - начинаем собирать мед
+        return new CollectingHoneyProcessState(_context, _hive);
     }
 }
