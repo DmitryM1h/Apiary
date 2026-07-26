@@ -31,7 +31,16 @@ const ACTOR_TYPES = {
 }
 
 onMounted(() => {
+    connectToServer()
+})
 
+onUnmounted(() => {
+    if (sseListener) {
+        sseListener.close()
+    }
+})
+
+function connectToServer() {
     sseListener = new EventSource('https://localhost:7257/api/ApiaryStates')
 
     sseListener.onmessage = (event) => {
@@ -52,15 +61,8 @@ onMounted(() => {
 
     sseListener.onerror = (error) => {
         console.error('SSE Error:', error)
-        sseListener.close()
     }
-})
-
-onUnmounted(() => {
-    if (sseListener) {
-        sseListener.close()
-    }
-})
+}
 
 function updateBeeKeeper(item) {
     if (!item.position) {
@@ -90,10 +92,6 @@ function updateBeeKeeper(item) {
 function updateFlower(item) {
     const index = flowers.value.findIndex(f => f.flowerId === item.flowerId)
 
-    if (!item.position) {
-        console.warn('Flower without position:', item)
-        return
-    }
 
     let coords = GetCoordinates(item.position.x, item.position.y)
     let screenX = coords[0]
@@ -115,11 +113,6 @@ function updateFlower(item) {
 
 function addOrUpdateBee(item) {
     const index = bees.value.findIndex(b => b.beeId === item.beeId)
-
-    if (!item.position) {
-        console.warn('Bee without position:', item)
-        return
-    }
 
     let coords = GetCoordinates(item.position.x, item.position.y)
     let screenX = coords[0]

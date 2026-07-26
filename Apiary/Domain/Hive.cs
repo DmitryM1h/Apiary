@@ -1,15 +1,13 @@
-﻿using System.Collections.Concurrent;
-
-namespace ApiaryEngine.Domain
+﻿namespace ApiaryEngine.Domain
 {
     public class Hive
     {
         public int HiveId { get; init; }
 
-        private readonly ConcurrentDictionary<int, int> HoneyByBee = new();
-        public int Honey => HoneyByBee.Values.ToList().Sum();
+        private readonly Dictionary<int, int> HoneyByBee = new();
+        public int Honey => HoneyByBee.Values.Sum();
 
-        public readonly ConcurrentDictionary<int, bool> BeesInHoney = new();
+        public readonly Dictionary<int, bool> BeesInHoney = new();
 
         public Hive(int hiveId)
         {
@@ -31,19 +29,13 @@ namespace ApiaryEngine.Domain
                 if (remainingToTake <= 0)
                     break;
 
-                HoneyByBee.AddOrUpdate(beeId,
-                    key => 0,
-                    (key, oldValue) =>
-                    {
-                        if (oldValue > 0 && remainingToTake > 0)
-                        {
-                            int takeFromBee = Math.Min(oldValue, remainingToTake);
-                            collectedHoney += takeFromBee;
-                            remainingToTake -= takeFromBee;
-                            return oldValue - takeFromBee;
-                        }
-                        return oldValue;
-                    });
+                if (HoneyByBee.TryGetValue(beeId, out int currentValue) && currentValue > 0)
+                {
+                    int takeFromBee = Math.Min(currentValue, remainingToTake);
+                    collectedHoney += takeFromBee;
+                    remainingToTake -= takeFromBee;
+                    HoneyByBee[beeId] = currentValue - takeFromBee;
+                }
             }
             honey = collectedHoney;
             return true;
@@ -51,14 +43,12 @@ namespace ApiaryEngine.Domain
 
         public void IncreaseHoney(int beeId, int amount)
         {
-
-            HoneyByBee.AddOrUpdate(beeId,
-                amount,
-                (key, currentValue) => { return currentValue + amount; });
-
+            if (HoneyByBee.ContainsKey(beeId))
+                HoneyByBee[beeId] += amount;
+            else
+                HoneyByBee[beeId] = amount;
 
             Console.WriteLine($"Теперь в улье (ID= {HiveId}) {Honey} ед. меда!");
-
         }
     }
 }

@@ -1,21 +1,15 @@
 <template>
     <div class="bee-keeper" :style="{ left: x + 'px', top: y + 'px' }">
         <div class="keeper-container" :class="{ sleeping: isWaiting }">
-            <img 
-                src="/Images/ArtemKos.jpg" 
-                alt="Пасечник" 
-                class="keeper-image"
-                :class="{ sleeping: isWaiting }"
-                @error="handleImageError" 
-            />
-            
-            <!-- ZZZ -->
+            <img src="/Images/ArtemKos.jpg" alt="Пасечник" class="keeper-image" :class="{ sleeping: isWaiting }"
+                @error="handleImageError" />
+
             <div v-if="isWaiting" class="zzz-container">
                 <span class="zzz zzz1">Z</span>
                 <span class="zzz zzz2">Z</span>
                 <span class="zzz zzz3">Z</span>
             </div>
-            
+
             <div class="state-badge" v-if="state">
                 {{ formatState(state) }}
             </div>
@@ -24,7 +18,7 @@
         <div class="honey-counter">
             🍯 {{ collectedHoney }}
         </div>
-        <div class="keeper-label">🧑‍🌾 Пасечник</div>
+        <div class="keeper-label">Пасечник</div>
     </div>
 </template>
 
@@ -83,7 +77,6 @@ function formatState(state) {
     transition: all 0.5s ease;
 }
 
-/* Спящий режим */
 .keeper-container.sleeping {
     animation: sleep 2s ease-in-out infinite;
 }
@@ -151,14 +144,17 @@ function formatState(state) {
         opacity: 0;
         transform: translate(0, 0) scale(0.5);
     }
+
     20% {
         opacity: 1;
         transform: translate(-5px, -10px) scale(1);
     }
+
     80% {
         opacity: 1;
         transform: translate(-15px, -25px) scale(1);
     }
+
     100% {
         opacity: 0;
         transform: translate(-20px, -35px) scale(1.2);
@@ -166,10 +162,21 @@ function formatState(state) {
 }
 
 @keyframes sleep {
-    0% { transform: translateY(0) rotate(0deg); }
-    25% { transform: translateY(-2px) rotate(1deg); }
-    75% { transform: translateY(-2px) rotate(-1deg); }
-    100% { transform: translateY(0) rotate(0deg); }
+    0% {
+        transform: translateY(0) rotate(0deg);
+    }
+
+    25% {
+        transform: translateY(-2px) rotate(1deg);
+    }
+
+    75% {
+        transform: translateY(-2px) rotate(-1deg);
+    }
+
+    100% {
+        transform: translateY(0) rotate(0deg);
+    }
 }
 
 .state-badge {
@@ -210,13 +217,25 @@ function formatState(state) {
 }
 
 @keyframes walk {
-    0% { transform: translateY(0) scale(1); }
-    100% { transform: translateY(-5px) scale(1.02); }
+    0% {
+        transform: translateY(0) scale(1);
+    }
+
+    100% {
+        transform: translateY(-5px) scale(1.02);
+    }
 }
 
 @keyframes glow {
-    0%, 100% { box-shadow: 0 0 5px rgba(255, 215, 0, 0.1); }
-    50% { box-shadow: 0 0 20px rgba(255, 215, 0, 0.4); }
+
+    0%,
+    100% {
+        box-shadow: 0 0 5px rgba(255, 215, 0, 0.1);
+    }
+
+    50% {
+        box-shadow: 0 0 20px rgba(255, 215, 0, 0.4);
+    }
 }
 
 .honey-counter {

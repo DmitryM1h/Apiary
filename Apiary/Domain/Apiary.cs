@@ -29,6 +29,7 @@ namespace ApiaryEngine.Domain
         public int NectarAmount => _nectarAmount;
         public Point Position { get; set; } = position;
 
+        private CancellationTokenSource cts = new();
         public int GetHoney(int honeyAmount)
         {
             if (honeyAmount > NectarAmount)
@@ -39,25 +40,44 @@ namespace ApiaryEngine.Domain
             {
                 Refresh();
             }
-
+            if (NectarAmount > 0 && _isRefreshing == true)
+            {
+                cts.Cancel();
+                cts.Dispose();
+                cts = new();
+            }
             return honeyAmount;
         }
-        private bool _isRefreshing = false;
+        private volatile bool _isRefreshing = false;
         private void Refresh()
         {
             _isRefreshing = true;
+            cts.CancelAfter(TimeSpan.FromSeconds(15));
             Task.Run(async () =>
             {
                 try
                 {
-                    await Task.Delay(10000);
-                    _nectarAmount = 50;
-                    _isRefreshing = false;
+                    await Task.Delay(5000, cts.Token);
+                    while (!cts.Token.IsCancellationRequested && _nectarAmount < 100)
+                    {
+                        await Task.Delay(1000);
+                        _nectarAmount += 10;
+                    }
                     Console.WriteLine($"Flower has been refreshed (id = {Id})");
+                }
+                catch(OperationCanceledException)
+                {
+
                 }
                 catch (Exception ex)
                 {
                     Console.WriteLine("Critical Exception while refreshing flower");
+                }
+                finally
+                {
+                    _isRefreshing = false;
+                    cts?.Dispose();
+                    cts = new();
                 }
             });
         }

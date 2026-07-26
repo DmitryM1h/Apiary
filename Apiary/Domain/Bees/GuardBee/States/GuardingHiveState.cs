@@ -63,9 +63,6 @@ namespace ApiaryEngine.Domain.Bees.States.GuardBeeStates
         private static IEnumerator<(double X, double Y)> RouteAroundHive(Point hivePosition)
         {
             const int radius = 5;
-            const double step = 0.5;
-            int stepsPerUnit = 2;
-
             var points = new List<(double X, double Y)>();
 
             for (double angle = 0; angle < 2 * Math.PI; angle += 0.1)
