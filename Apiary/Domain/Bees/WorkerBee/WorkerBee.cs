@@ -1,6 +1,7 @@
 ﻿using ApiaryEngine.abstractions;
 using ApiaryEngine.Abstractions;
 using ApiaryEngine.Domain.Bees.WorkerBee.States;
+using ApiaryEngine.Domain.Shared;
 
 
 
@@ -24,7 +25,7 @@ namespace ApiaryEngine.Domain.Bees.WorkerBee
         public int producedHoney;
         public WorkerBee(int hiveId) : base(hiveId)
         {
-            base.State = new WaitingState(this);
+            base.State = new WaitingState<VisitingFlowersState>();
         }
 
         public void AddNectar(int nectarAmount)

@@ -13,9 +13,10 @@ namespace ApiaryEngine.Domain.Bees.WorkerBee.States
         Flower? flower;
 
         IEnumerator<Point> _routeToFlower;
-        public VisitingFlowersState(WorkerBee _context)
+        public VisitingFlowersState()
         {
-            BeeContext = _context;
+            BeeContext = (WorkerBee)ApplicationContext.CurrentActor;
+
             _routeToFlower = RouteToRandomFlower(BeeContext.Position);
         }
 

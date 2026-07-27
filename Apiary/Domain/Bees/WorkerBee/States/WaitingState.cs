@@ -9,9 +9,10 @@ public class WaitingState : IState
     public WorkerBee Context { get; set; }
 
 
-    public WaitingState(WorkerBee context)
+    public WaitingState()
     {
-        Context = context;
+        Context = (WorkerBee)ApplicationContext.CurrentActor;
+
         _nextTimeAct = DateTime.Now.AddSeconds(10);
     }
 
@@ -27,7 +28,7 @@ public class WaitingState : IState
 
     public IState NextState()
     {
-        return new VisitingFlowersState(Context);
+        return new VisitingFlowersState();
     }
 
 }

@@ -1,13 +1,16 @@
 <template>
-    <div class="gameMap">
-        <Bee v-for="bee in bees" :key="bee.beeId" :x="bee.positionX" :y="bee.positionY" :id="bee.beeId"
-            :isQueen="bee.isQueen" :isGuard="bee.isGuard" />
+    <div class="game-container">
+        <EventLog :events="eventLog" />
+        <div class="gameMap">
+            <Bee v-for="bee in bees" :key="bee.beeId" :x="bee.positionX" :y="bee.positionY" :id="bee.beeId"
+                :isQueen="bee.isQueen" :isGuard="bee.isGuard" />
 
-        <Flower v-for="flower in flowers" :key="flower.flowerId" :x="flower.positionX" :y="flower.positionY"
-            :nectarAmount="flower.nectarAmount" />
+            <Flower v-for="flower in flowers" :key="flower.flowerId" :x="flower.positionX" :y="flower.positionY"
+                :nectarAmount="flower.nectarAmount" />
 
-        <BeeKeeper v-if="beeKeeper" :x="beeKeeper.positionX" :y="beeKeeper.positionY"
-            :collectedHoney="beeKeeper.collectedHoney" :state="beeKeeper.state" />
+            <BeeKeeper v-if="beeKeeper" :x="beeKeeper.positionX" :y="beeKeeper.positionY"
+                :collectedHoney="beeKeeper.collectedHoney" :state="beeKeeper.state" />
+        </div>
     </div>
 </template>
 
@@ -16,11 +19,14 @@ import { ref, onMounted, onUnmounted } from 'vue'
 import Bee from './Bee.vue'
 import Flower from './Flower.vue'
 import BeeKeeper from './BeeKeeper.vue'
+import EventLog from './EventLog.vue'
 
 const bees = ref([])
 const flowers = ref([])
 const beeKeeper = ref(null)
+const eventLog = ref([])
 let sseListener = null
+let eventCleanupInterval = null
 
 const ACTOR_TYPES = {
     WorkerBee: 1,
@@ -32,11 +38,15 @@ const ACTOR_TYPES = {
 
 onMounted(() => {
     connectToServer()
+    eventCleanupInterval = setInterval(cleanupOldEvents, 5000)
 })
 
 onUnmounted(() => {
     if (sseListener) {
         sseListener.close()
+    }
+    if (eventCleanupInterval) {
+        clearInterval(eventCleanupInterval)
     }
 })
 
@@ -92,7 +102,6 @@ function updateBeeKeeper(item) {
 function updateFlower(item) {
     const index = flowers.value.findIndex(f => f.flowerId === item.flowerId)
 
-
     let coords = GetCoordinates(item.position.x, item.position.y)
     let screenX = coords[0]
     let screenY = coords[1]
@@ -127,6 +136,10 @@ function addOrUpdateBee(item) {
         bees.value[index].isQueen = isQueen
         bees.value[index].isGuard = isGuard
     } else {
+        // Новая пчела - добавляем событие в лог
+        const beeType = isQueen ? 'Королева' : isGuard ? 'Охранник' : 'Рабочая'
+        addEvent(`🐝 ${beeType} пчела #${item.beeId} появилась на карте`)
+
         bees.value.push({
             beeId: item.beeId,
             positionX: screenX,
@@ -135,6 +148,23 @@ function addOrUpdateBee(item) {
             isGuard: isGuard
         })
     }
+}
+
+function addEvent(message) {
+    const timestamp = new Date().toLocaleTimeString()
+    eventLog.value.unshift({
+        id: Date.now(),
+        timestamp: timestamp,
+        message: message,
+        createdAt: Date.now()
+    })
+}
+
+function cleanupOldEvents() {
+    const now = Date.now()
+    eventLog.value = eventLog.value.filter(event => {
+        return (now - event.createdAt) < 15000 // 15 секунд
+    })
 }
 
 function GetCoordinates(positionX, positionY) {
@@ -149,15 +179,32 @@ function GetCoordinates(positionX, positionY) {
 </script>
 
 <style scoped>
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+.game-container {
+    display: flex;
+    gap: 10px;
+    align-items: flex-start;
+    width: 100%;
+    min-height: 100vh;
+    padding: 0;
+    margin: 0;
+    background: #1a1a2e;
+}
+
 .gameMap {
     background-color: rgb(5, 139, 50);
     width: 1200px;
     height: 900px;
     position: relative;
     overflow: hidden;
-    margin: 0 auto;
     border: 3px solid #333;
     border-radius: 8px;
-    margin-left: 50px;
+    flex-shrink: 0;
+    margin-top: 10px;
 }
 </style>

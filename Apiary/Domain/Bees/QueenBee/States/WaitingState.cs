@@ -12,7 +12,7 @@ public class WaitingState : IState
     public WaitingState(QueenBee context)
     {
         Context = context;
-        _nextTimeAct = DateTime.Now.AddSeconds(QueenBee._secondsToTryProduce);
+        _nextTimeAct = DateTime.Now.AddSeconds(15);
     }
 
     public bool IsCompleted { get; set; } = false;

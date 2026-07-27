@@ -34,7 +34,6 @@ public class CollectingHoneyState : IState
             }
         }
 
-        // Дошли до улья - переходим к процессу сбора
         if (_routeToHive == null)
         {
             IsCompleted = true;
@@ -75,7 +74,6 @@ public class CollectingHoneyState : IState
 
     public IState NextState()
     {
-        // После того как дошли до улья - начинаем собирать мед
         return new CollectingHoneyProcessState(_context, _hive);
     }
 }

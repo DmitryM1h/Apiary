@@ -31,6 +31,6 @@ public class ProducingHoneyState : IState
  
     public IState NextState()
     {
-        return new WaitingState(_context);
+        return new WaitingState();
     }
 }

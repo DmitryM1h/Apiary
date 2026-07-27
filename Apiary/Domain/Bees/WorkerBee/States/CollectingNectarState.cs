@@ -58,7 +58,7 @@ namespace ApiaryEngine.Domain.Bees.WorkerBee.States
             }
             else
             {
-                return new VisitingFlowersState(Context); // TODO исключить цветок который уже посещали.
+                return new VisitingFlowersState(); // TODO исключить цветок который уже посещали.
             }
         }
     }

@@ -57,7 +57,7 @@ namespace ApiaryEngine.Domain
             {
                 try
                 {
-                    await Task.Delay(5000, cts.Token);
+                    await Task.Delay(5000, cts.Token); // начнем регенерацию через 5 секунд
                     while (!cts.Token.IsCancellationRequested && _nectarAmount < 100)
                     {
                         await Task.Delay(1000);
@@ -65,10 +65,7 @@ namespace ApiaryEngine.Domain
                     }
                     Console.WriteLine($"Flower has been refreshed (id = {Id})");
                 }
-                catch(OperationCanceledException)
-                {
-
-                }
+                catch(OperationCanceledException) {}
                 catch (Exception ex)
                 {
                     Console.WriteLine("Critical Exception while refreshing flower");

@@ -19,6 +19,8 @@ namespace ApiaryEngine
 
         public ChannelReader<IActorState> _stateReader => _statesBus.Reader;
 
+        private ApplicationContext _applicationContext = new();
+
         public ApiarySimulationEngine(CancellationToken cts = default)
         {
             _cts = cts;
@@ -71,6 +73,8 @@ namespace ApiaryEngine
 
                 for (int i = 0; i < actors.Count; i++)
                 {
+                    _applicationContext.SwitchActor(actors[i]);
+
                     actors[i].Tick();
 
                     var actorsEvents = ActorsEvents.ReadEvents();

@@ -38,7 +38,6 @@ namespace ApiaryEngine.Domain.BeeKeeper.States
             {
                 int collected = 0;
 
-                // Собираем по 10 или 1 меда за раз
                 if (_hive.Honey >= 10)
                 {
                     if (_hive.TryTakeHoney(10, out int? honey))
