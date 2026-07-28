@@ -6,16 +6,7 @@ using ApiaryEngine.Domain.Shared;
 
 namespace ApiaryEngine.Domain.Bees.WorkerBee
 {
-    public class WorkerBeeState : BeeState
-    {
-        public int CollectedHoney { get; init; }
-
-        public override string ToString()
-        {
-            return base.ToString() + $" honey: {CollectedHoney}";
-        }
-
-    }
+ 
     public class WorkerBee : Bee, IActor
     {
         public int CollectedNectar { get; private set; }

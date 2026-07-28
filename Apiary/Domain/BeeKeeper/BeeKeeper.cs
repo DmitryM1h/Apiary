@@ -1,17 +1,11 @@
 ﻿using ApiaryEngine.Abstractions;
 using ApiaryEngine.Domain.BeeKeeper.States;
 using ApiaryEngine.Domain.Bees;
+using ApiaryEngine.Helpers;
 
 namespace ApiaryEngine.Domain.BeeKeeper
 {
-    public class BeeKeeperState : IActorState
-    {
-        public int BeeKeeperId { get; set; }
-        public Point Position { get; set; }
-        public int CollectedHoney { get; set; }
-        public string State { get; set; }
-        public ActorType ActorType { get; init; } = ActorType.BeeKeeper;
-    }
+
     public class BeeKeeper : IActor
     {
         public int BeeKeeperId { get; private set; }

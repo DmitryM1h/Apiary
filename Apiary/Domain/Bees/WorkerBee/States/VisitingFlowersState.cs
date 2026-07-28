@@ -1,4 +1,5 @@
 ﻿using ApiaryEngine.Abstractions;
+using ApiaryEngine.Helpers;
 
 
 
@@ -15,7 +16,7 @@ namespace ApiaryEngine.Domain.Bees.WorkerBee.States
         IEnumerator<Point> _routeToFlower;
         public VisitingFlowersState()
         {
-            BeeContext = (WorkerBee)ApplicationContext.CurrentActor;
+            BeeContext = (WorkerBee)ApplicationContext.Context.Value!;
 
             _routeToFlower = RouteToRandomFlower(BeeContext.Position);
         }

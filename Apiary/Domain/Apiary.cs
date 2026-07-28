@@ -1,94 +1,10 @@
 ﻿using ApiaryEngine.Abstractions;
 using ApiaryEngine.Domain.Bees;
+using ApiaryEngine.Helpers;
 
 namespace ApiaryEngine.Domain
 {
-    public class FlowerState : IActorState
-    {
-        public int FlowerId { get; set; }
-        public Point Position { get; set; }
-        public int NectarAmount { get; set; }
-        public ActorType ActorType { get; init; } = ActorType.Flower;
-    }
-    public struct Point
-    {
-        public double X { get; set; }
-        public double Y { get; set; }
-
-        public Point(double x, double y)
-        {
-            X = x;
-            Y = y;
-        }
-
-
-    }
-    public record class Flower(int Id, Point position) : IActor
-    {
-        private volatile int _nectarAmount = 100;
-        public int NectarAmount => _nectarAmount;
-        public Point Position { get; set; } = position;
-
-        private CancellationTokenSource cts = new();
-        public int GetHoney(int honeyAmount)
-        {
-            if (honeyAmount > NectarAmount)
-                throw new ArgumentException("Not enough honey");
-            _nectarAmount -= honeyAmount;
-
-            if (NectarAmount == 0 && _isRefreshing == false)
-            {
-                Refresh();
-            }
-            if (NectarAmount > 0 && _isRefreshing == true)
-            {
-                cts.Cancel();
-                cts.Dispose();
-                cts = new();
-            }
-            return honeyAmount;
-        }
-        private volatile bool _isRefreshing = false;
-        private void Refresh()
-        {
-            _isRefreshing = true;
-            cts.CancelAfter(TimeSpan.FromSeconds(15));
-            Task.Run(async () =>
-            {
-                try
-                {
-                    await Task.Delay(5000, cts.Token); // начнем регенерацию через 5 секунд
-                    while (!cts.Token.IsCancellationRequested && _nectarAmount < 100)
-                    {
-                        await Task.Delay(1000);
-                        _nectarAmount += 10;
-                    }
-                    Console.WriteLine($"Flower has been refreshed (id = {Id})");
-                }
-                catch(OperationCanceledException) {}
-                catch (Exception ex)
-                {
-                    Console.WriteLine("Critical Exception while refreshing flower");
-                }
-                finally
-                {
-                    _isRefreshing = false;
-                    cts?.Dispose();
-                    cts = new();
-                }
-            });
-        }
-
-        public void Tick()
-        {
-            throw new NotImplementedException();
-        }
-
-        public IActorState GetState()
-        {
-            return new FlowerState() { FlowerId = Id, Position = Position, NectarAmount = _nectarAmount };
-        }
-    }
+    
     public static class Apiary
     {
 

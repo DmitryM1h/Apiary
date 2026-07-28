@@ -14,7 +14,7 @@ namespace ApiaryEngine.Domain.Bees.QueenBee.States
         public QueenBee Context { get; init; }  
         public CollectingHoneyState()
         {
-            Context = (QueenBee)ApplicationContext.CurrentActor;
+            Context = (QueenBee)ApplicationContext.Context.Value!;
         }
 
         public void Act()

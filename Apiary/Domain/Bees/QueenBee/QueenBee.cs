@@ -1,22 +1,11 @@
 ﻿using ApiaryEngine.Abstractions;
 using ApiaryEngine.Domain.Bees.QueenBee.States;
+using ApiaryEngine.Domain.Dtos;
 using ApiaryEngine.Domain.Shared;
 
 
 namespace ApiaryEngine.Domain.Bees.QueenBee
 {
-
-    public class WorkerBeeState : BeeState
-    {
-        public int CollectedHoney { get; init; }
-
-        public override string ToString()
-        {
-            return base.ToString() + $" honey: {CollectedHoney}";
-        }
-
-    }
-
     public class QueenBee : Bee, IActor
     {
         public const int _amountOfHoneyToBornBee = 50;

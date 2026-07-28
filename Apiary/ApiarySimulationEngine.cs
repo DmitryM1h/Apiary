@@ -59,34 +59,48 @@ namespace ApiaryEngine
 
             actors.Add(beeKeeper);
 
-            
+
+            for (int i = 0; i < actors.Count; i++)
+            {
+                _ = RunActor(actors[i]);
+            }
+
             var _timer = new PeriodicTimer(TimeSpan.FromMilliseconds(100));
 
-            while(await _timer.WaitForNextTickAsync(_cts))
+            while (await _timer.WaitForNextTickAsync(_cts))
             {
                 var flowersStates = Apiary.Flowers.Values.Select(t => t.GetState());
 
                 foreach (var flowerState in flowersStates)
                     await _statesBus.Writer.WriteAsync(flowerState);
 
+                var actorsEvents = ActorsEvents.ReadEvents();
 
-                for (int i = 0; i < actors.Count; i++)
+                await HandleEvents(actorsEvents);
+
+
+            }
+
+        }
+
+        public Task RunActor(IActor actor)
+        {
+            return Task.Run(async () =>
+            {
+                _applicationContext.SetActor(actor);
+
+                var _timer = new PeriodicTimer(TimeSpan.FromMilliseconds(100));
+
+                while (await _timer.WaitForNextTickAsync(_cts))
                 {
-                    _applicationContext.SwitchActor(actors[i]);
+                    actor.Tick();
 
-                    actors[i].Tick();
-
-                    var actorsEvents = ActorsEvents.ReadEvents();
-
-                    var actorState = actors[i].GetState();
-
-                    await HandleEvents(actorsEvents);
+                    var actorState = actor.GetState();
 
                     await _statesBus.Writer.WriteAsync(actorState);
 
                 }
-            }
-
+            }, _cts);
         }
 
         public async Task HandleEvents(IEnumerable<IEvent> events)
@@ -96,7 +110,10 @@ namespace ApiaryEngine
                 switch(@event)
                 {
                     case BeeWasBornEvent ev:
-                        actors.Add(new WorkerBee(ev.HiveId));
+                        var actor = new WorkerBee(ev.HiveId);
+                        actors.Add(actor);
+                        _ = RunActor(actor);
+                            
                         break;
 
                 }

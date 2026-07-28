@@ -1,5 +1,6 @@
 ﻿using ApiaryEngine.Abstractions;
 using ApiaryEngine.Domain.Bees.GuardBeeStates;
+using ApiaryEngine.Helpers;
 
 namespace ApiaryEngine.Domain.Bees.States.GuardBeeStates
 {

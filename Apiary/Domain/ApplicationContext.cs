@@ -7,11 +7,11 @@ namespace ApiaryEngine.Domain
 {
     public class ApplicationContext
     {
-        public static IActor CurrentActor { get; private set; }
+        public static AsyncLocal<IActor> Context { get; private set; } = new();
 
-        public void SwitchActor(IActor actor)
+        public void SetActor(IActor actor)
         {
-            CurrentActor = actor;
+            Context.Value = actor;
         }
     }
 }

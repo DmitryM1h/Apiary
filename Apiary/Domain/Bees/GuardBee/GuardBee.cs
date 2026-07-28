@@ -1,5 +1,6 @@
 ﻿using ApiaryEngine.Abstractions;
 using ApiaryEngine.Domain.Bees.States.GuardBeeStates;
+using ApiaryEngine.Domain.Dtos;
 using System;
 using System.Collections.Generic;
 using System.Text;

@@ -4,34 +4,6 @@ using ApiaryEngine.Helpers;
 
 namespace ApiaryEngine.Domain.Bees
 {
-    public interface IActorState 
-    {
-        public ActorType ActorType { get; init; }
-    }
-    public enum ActorType
-    {
-        WorkerBee = 1,
-        QueenBee = 2,
-        GuardBee = 3,
-        Flower = 4,
-        BeeKeeper = 5,
-       
-    }
-    public class BeeState : IActorState
-    {
-        public int BeeId { get; init; }
-        public int HiveId { get; init; }
-        public Point Position { get; init; }
-        public string state { get; init; }
-
-        public ActorType ActorType { get; init; }
-
-        public override string ToString()
-        {
-            return $"{BeeId} , {HiveId}, {Position}, {state}";
-        }
-    }
-
     public abstract class Bee
     {
         public int BeeId { get; init; }

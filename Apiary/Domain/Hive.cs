@@ -1,13 +1,13 @@
-﻿namespace ApiaryEngine.Domain
+﻿using System.Collections.Concurrent;
+
+namespace ApiaryEngine.Domain
 {
     public class Hive
     {
         public int HiveId { get; init; }
 
-        private readonly Dictionary<int, int> HoneyByBee = new();
+        private readonly ConcurrentDictionary<int, int> HoneyByBee = new();
         public int Honey => HoneyByBee.Values.Sum();
-
-        public readonly Dictionary<int, bool> BeesInHoney = new();
 
         public Hive(int hiveId)
         {
