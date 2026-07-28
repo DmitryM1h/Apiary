@@ -1,4 +1,5 @@
 ﻿using ApiaryEngine.Abstractions;
+using ApiaryEngine.Domain.Shared;
 using ApiaryEngine.Exceptions;
 
 
@@ -11,9 +12,9 @@ namespace ApiaryEngine.Domain.Bees.QueenBee.States
         public bool IsCompleted { get; set; }
 
         public QueenBee Context { get; init; }  
-        public CollectingHoneyState(QueenBee context)
+        public CollectingHoneyState()
         {
-            Context = context;
+            Context = (QueenBee)ApplicationContext.CurrentActor;
         }
 
         public void Act()
@@ -36,7 +37,7 @@ namespace ApiaryEngine.Domain.Bees.QueenBee.States
             if (CollectedHoney > 0)
                 return new ProducingBeeState(Context);
             else
-                return new WaitingState(Context);
+                return new WaitingState<CollectingHoneyState>();
         }
     }
 }

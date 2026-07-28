@@ -1,5 +1,4 @@
-﻿using ApiaryEngine.abstractions;
-using ApiaryEngine.Abstractions;
+﻿using ApiaryEngine.Abstractions;
 using ApiaryEngine.Domain.Bees.WorkerBee.States;
 using ApiaryEngine.Domain.Shared;
 

@@ -2,7 +2,7 @@
 using ApiaryEngine.Domain;
 using ApiaryEngine.Helpers;
 
-namespace ApiaryEngine.abstractions
+namespace ApiaryEngine.Domain.Bees
 {
     public interface IActorState 
     {

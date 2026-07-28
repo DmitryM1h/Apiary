@@ -17,7 +17,7 @@
 </template>
 
 <script setup>
-import { defineProps, onMounted, onUnmounted } from 'vue'
+import { defineProps, onMounted } from 'vue'
 
 const props = defineProps({
     events: {

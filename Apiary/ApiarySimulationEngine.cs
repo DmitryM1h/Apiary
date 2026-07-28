@@ -1,7 +1,7 @@
-﻿using ApiaryEngine.abstractions;
-using ApiaryEngine.Abstractions;
+﻿using ApiaryEngine.Abstractions;
 using ApiaryEngine.Domain;
 using ApiaryEngine.Domain.BeeKeeper;
+using ApiaryEngine.Domain.Bees;
 using ApiaryEngine.Domain.Bees.GuardBeeStates;
 using ApiaryEngine.Domain.Bees.QueenBee;
 using ApiaryEngine.Domain.Bees.WorkerBee;
@@ -16,7 +16,6 @@ namespace ApiaryEngine
         private readonly List<IActor> actors = [];
 
         private readonly Channel<IActorState> _statesBus = Channel.CreateBounded<IActorState>(1000);
-
         public ChannelReader<IActorState> _stateReader => _statesBus.Reader;
 
         private ApplicationContext _applicationContext = new();

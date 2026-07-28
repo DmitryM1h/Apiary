@@ -1,8 +1,6 @@
-﻿using ApiaryEngine.abstractions;
-using ApiaryEngine.Abstractions;
+﻿using ApiaryEngine.Abstractions;
 using ApiaryEngine.Domain.Bees.QueenBee.States;
-using ApiaryEngine.Domain.Bees.WorkerBee;
-using ApiaryEngine.Helpers;
+using ApiaryEngine.Domain.Shared;
 
 
 namespace ApiaryEngine.Domain.Bees.QueenBee
@@ -31,7 +29,7 @@ namespace ApiaryEngine.Domain.Bees.QueenBee
            
             _hive = hive;
 
-            base.State = new WaitingState(this);
+            base.State = new WaitingState<CollectingHoneyState>();
         }
 
         public IActorState GetState()

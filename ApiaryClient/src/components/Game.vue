@@ -136,7 +136,6 @@ function addOrUpdateBee(item) {
         bees.value[index].isQueen = isQueen
         bees.value[index].isGuard = isGuard
     } else {
-        // Новая пчела - добавляем событие в лог
         const beeType = isQueen ? 'Королева' : isGuard ? 'Охранник' : 'Рабочая'
         addEvent(`🐝 ${beeType} пчела #${item.beeId} появилась на карте`)
 

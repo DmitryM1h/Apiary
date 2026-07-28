@@ -9,12 +9,9 @@ namespace ApiaryEngine.Domain.Shared
     public class WaitingState<V> : IState where V: IState, new()
     {
         public DateTime _nextTimeAct;
-        public IActor Context { get; set; }
-
 
         public WaitingState()
         {
-            Context = ApplicationContext.CurrentActor;
             _nextTimeAct = DateTime.Now.AddSeconds(15);
         }
 

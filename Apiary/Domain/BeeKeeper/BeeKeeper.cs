@@ -1,6 +1,6 @@
-﻿using ApiaryEngine.abstractions;
-using ApiaryEngine.Abstractions;
+﻿using ApiaryEngine.Abstractions;
 using ApiaryEngine.Domain.BeeKeeper.States;
+using ApiaryEngine.Domain.Bees;
 
 namespace ApiaryEngine.Domain.BeeKeeper
 {

@@ -1,5 +1,5 @@
 ﻿using ApiaryEngine.Abstractions;
-using ApiaryEngine.Domain.Bees.WorkerBee;
+using ApiaryEngine.Domain.Shared;
 
 namespace ApiaryEngine.Domain.Bees.QueenBee.States;
 
@@ -34,6 +34,6 @@ public class ProducingBeeState : IState
 
     public IState NextState()
     {
-        return new WaitingState(_context);
+        return new WaitingState<CollectingHoneyState>();
     }
 }

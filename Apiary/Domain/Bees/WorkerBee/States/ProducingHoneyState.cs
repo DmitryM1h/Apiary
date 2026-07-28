@@ -1,4 +1,5 @@
 ﻿using ApiaryEngine.Abstractions;
+using ApiaryEngine.Domain.Shared;
 
 
 
@@ -31,6 +32,6 @@ public class ProducingHoneyState : IState
  
     public IState NextState()
     {
-        return new WaitingState();
+        return new WaitingState<VisitingFlowersState>();
     }
 }

@@ -1,5 +1,5 @@
-﻿using ApiaryEngine.abstractions;
-using ApiaryEngine.Domain;
+﻿using ApiaryEngine.Domain;
+using ApiaryEngine.Domain.Bees;
 using System;
 using System.Collections.Generic;
 using System.Text;
