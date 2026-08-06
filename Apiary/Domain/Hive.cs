@@ -43,10 +43,10 @@ namespace ApiaryEngine.Domain
 
         public void IncreaseHoney(int beeId, int amount)
         {
-            if (HoneyByBee.ContainsKey(beeId))
-                HoneyByBee[beeId] += amount;
-            else
-                HoneyByBee[beeId] = amount;
+            HoneyByBee.AddOrUpdate(beeId, amount, (oldVal, newVal) =>
+            {
+                return oldVal + newVal;
+            });
 
             Console.WriteLine($"Теперь в улье (ID= {HiveId}) {Honey} ед. меда!");
         }

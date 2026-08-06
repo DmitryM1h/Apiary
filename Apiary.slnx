@@ -1,4 +1,7 @@
 <Solution>
+  <Folder Name="/Элементы решения/">
+    <File Path="Dockerfile" />
+  </Folder>
   <Project Path="Apiary.Tests/Apiary.Tests.csproj" Id="0dc02cc8-aaee-401e-9a1c-f52fa6cb67ec">
     <Build Solution="Debug|*" Project="false" />
   </Project>

@@ -14,7 +14,7 @@ namespace ApiaryEngine.Domain.Bees
 
         public Bee(int hiveId)
         {
-            Position = Apiary.HivePositions[hiveId]; // как мокать теперь??
+            Position = Apiary.HivePositions[hiveId];
             BeeId = IdentityProvider.GetIdentity();
             HiveId = hiveId;
         }

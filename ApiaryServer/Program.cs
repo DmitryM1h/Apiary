@@ -27,8 +27,10 @@ app.MapGet("api/ApiaryStates", (CancellationToken token) =>
  {
      try
      {
+         var channelReader = apiaryEngine.GetChannelReader();
+
          return Results.ServerSentEvents(
-             apiaryEngine._stateReader.ReadAllAsync(token));
+             channelReader.ReadAllAsync(token));
      }
      catch (OperationCanceledException)
      {

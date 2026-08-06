@@ -1,6 +1,4 @@
 ﻿using ApiaryEngine.Abstractions;
-using ApiaryEngine.Domain;
-using ApiaryEngine.Domain.BeeKeeper;
 using ApiaryEngine.Domain.BeeKeeper.States;
 using ApiaryEngine.Helpers;
 
@@ -12,11 +10,11 @@ public class CollectingHoneyState : IState
     private readonly Hive _hive;
     private IEnumerator<Point> _routeToHive;
 
-    public CollectingHoneyState(BeeKeeper context, Hive hive)
+    public CollectingHoneyState()
     {
-        _context = context;
-        _hive = hive;
-        _routeToHive = RouteToHive(_context.Position, Apiary.HivePositions[hive.HiveId]);
+        _context = (BeeKeeper)ApplicationContext.Context.Value!;
+        _hive = _context.GetNextHive();
+        _routeToHive = RouteToHive(_context.Position, Apiary.HivePositions[_hive.HiveId]);
     }
 
     public void Act()
@@ -76,6 +74,6 @@ public class CollectingHoneyState : IState
 
     public IState NextState()
     {
-        return new CollectingHoneyProcessState(_context, _hive);
+        return new CollectingHoneyProcessState(_hive);
     }
 }

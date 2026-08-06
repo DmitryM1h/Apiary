@@ -6,11 +6,7 @@
 
         public static int GetIdentity()
         {
-            Console.WriteLine($"Кол-во пчелок на данный момент {beeCounter + 1}");
-
-            return ++beeCounter;
-
-            //return Interlocked.Increment(ref beeCounter);
+            return Interlocked.Increment(ref beeCounter);
         }
     }
 }

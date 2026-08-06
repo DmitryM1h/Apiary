@@ -9,9 +9,9 @@ namespace ApiaryEngine.Domain.BeeKeeper.States
         private readonly Hive _hive;
         private IEnumerator<int> _collectingProcess;
 
-        public CollectingHoneyProcessState(BeeKeeper context, Hive hive)
+        public CollectingHoneyProcessState(Hive hive)
         {
-            _context = context;
+            _context = (BeeKeeper)ApplicationContext.Context.Value!;
             _hive = hive;
             _collectingProcess = CollectHoney();
         }

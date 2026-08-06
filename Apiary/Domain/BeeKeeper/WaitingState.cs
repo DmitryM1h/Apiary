@@ -24,12 +24,9 @@ namespace ApiaryEngine.Domain.BeeKeeper.States
 
         public IState NextState()
         {
-            var nextHive = _context.GetNextHive();
-            if (nextHive != null)
-            {
-                return new CollectingHoneyState(_context, nextHive);
-            }
-            return this;
+
+            return new CollectingHoneyState();
+
         }
     }
 }

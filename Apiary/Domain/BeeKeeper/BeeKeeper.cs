@@ -1,6 +1,7 @@
 ﻿using ApiaryEngine.Abstractions;
 using ApiaryEngine.Domain.BeeKeeper.States;
 using ApiaryEngine.Domain.Bees;
+using ApiaryEngine.Domain.Shared;
 using ApiaryEngine.Helpers;
 
 namespace ApiaryEngine.Domain.BeeKeeper
@@ -22,7 +23,7 @@ namespace ApiaryEngine.Domain.BeeKeeper
             BeeKeeperId = 1;
 
             Position = new Point(40, 0);
-            _currentState = new WaitingState(this);
+            _currentState = new WaitingState<CollectingHoneyState>();
         }
 
         public void Tick()
@@ -60,7 +61,7 @@ namespace ApiaryEngine.Domain.BeeKeeper
         public Hive GetNextHive()
         {
             if (_hives.Length == 0)
-                return null;
+                throw new Exception("No initialized hives");
 
             _currentHiveIndex = (_currentHiveIndex + 1) % _hives.Length;
             return _hives[_currentHiveIndex];

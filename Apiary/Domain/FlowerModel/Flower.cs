@@ -11,7 +11,7 @@ namespace ApiaryEngine.Domain.FlowerModel
     {
         private volatile int _nectarAmount = 100;
         private volatile bool _isRefreshing = false;
-        private Lock _lock = new();
+        private readonly Lock _lock = new();
         private CancellationTokenSource cts = new();
 
         public Point Position { get; set; } = position;
@@ -36,11 +36,11 @@ namespace ApiaryEngine.Domain.FlowerModel
 
         public void RefreshIfOutOfHoney()
         {
-            if (NectarAmount == 0 && _isRefreshing == false)
+            if (_nectarAmount == 0 && _isRefreshing == false)
             {
                 using var lockScope = _lock.EnterScope();
 
-                if (NectarAmount == 0 && _isRefreshing == false)
+                if (_nectarAmount == 0 && _isRefreshing == false)
                     Refresh();
 
             }
@@ -49,11 +49,11 @@ namespace ApiaryEngine.Domain.FlowerModel
         public void StopRefreshingIfBeingCollected()
         {
 
-            if (NectarAmount > 0 && _isRefreshing == true)
+            if (_nectarAmount > 0 && _isRefreshing == true)
             {
                 using var lockScope = _lock.EnterScope();
 
-                if (NectarAmount > 0 && _isRefreshing == true)
+                if (_nectarAmount > 0 && _isRefreshing == true)
                 {
                     cts.Cancel();
                     cts.Dispose();
@@ -78,10 +78,6 @@ namespace ApiaryEngine.Domain.FlowerModel
                     Console.WriteLine($"Flower has been refreshed (id = {Id})");
                 }
                 catch (OperationCanceledException) { }
-                catch (Exception ex)
-                {
-                    Console.WriteLine("Critical Exception while refreshing flower");
-                }
                 finally
                 {
                     _isRefreshing = false;
@@ -91,10 +87,7 @@ namespace ApiaryEngine.Domain.FlowerModel
             });
         }
 
-        public void Tick()
-        {
-            throw new NotImplementedException();
-        }
+        public void Tick() { }
 
         public IActorState GetState()
         {
