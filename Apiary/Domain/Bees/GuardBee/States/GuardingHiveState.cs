@@ -8,13 +8,15 @@ namespace ApiaryEngine.Domain.Bees.States.GuardBeeStates
     {
         public bool IsCompleted { get; set; } = false;
 
-        private GuardBee context;
-        private Point hivePosition;
+        private Lazy<GuardBee> context = new(() => (GuardBee)ApplicationContext.Context.Value!);
+        //private Lazy<Point> hivePosition = new(() => Apiary.HivePositions[context.Value.Hive.HiveId]);
+
+
         private IEnumerator<(double X, double Y)> _guardBeePath;
-        public GuardingHiveState(GuardBee context)
+        public GuardingHiveState()
         {
-            this.context = context;
-            hivePosition = Apiary.HivePositions[context.Hive.HiveId];
+            //this.context = (GuardBee)ApplicationContext.Context.Value!;
+            //hivePosition = Apiary.HivePositions[context.Hive.HiveId];
             _guardBeePath = GuardBeeRoute();
         }
 
@@ -31,7 +33,7 @@ namespace ApiaryEngine.Domain.Bees.States.GuardBeeStates
             var noiseX = (new Random().NextDouble() - 0.5) * 1.5;
             var noiseY = (new Random().NextDouble() - 0.5) * 1.5;
 
-            context.UpdatePosition(new Point(
+            context.Value.UpdatePosition(new Point(
                 newPosition.X + noiseX,
                 newPosition.Y + noiseY
             ));
@@ -46,7 +48,9 @@ namespace ApiaryEngine.Domain.Bees.States.GuardBeeStates
 
         private IEnumerator<(double X, double Y)> GuardBeeRoute()
         {
-            var routetoradius = RouteToRadius(context.Position);
+            var hivePosition = Apiary.HivePositions[context.Value.Hive.HiveId];
+
+            var routetoradius = RouteToRadius(context.Value.Position);
 
             while (routetoradius.MoveNext())
             {
@@ -84,6 +88,8 @@ namespace ApiaryEngine.Domain.Bees.States.GuardBeeStates
 
         private IEnumerator<(double X, double Y)> RouteToRadius(Point initialPosition)
         {
+            var hivePosition = Apiary.HivePositions[context.Value.Hive.HiveId];
+
             var firstPoint = GetFirstPointOnCircle(hivePosition);
 
             double x = initialPosition.X;

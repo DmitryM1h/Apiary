@@ -14,7 +14,7 @@ namespace ApiaryEngine.Domain.Bees.GuardBeeStates
         public GuardBee(Hive hive) : base(hive.HiveId)
         {
             Hive = hive;
-            base.State = new GuardingHiveState(this);
+            base.State = new GuardingHiveState();
         }
 
         public IActorState GetState()

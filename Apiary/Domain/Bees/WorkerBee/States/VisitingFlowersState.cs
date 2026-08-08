@@ -36,7 +36,7 @@ namespace ApiaryEngine.Domain.Bees.WorkerBee.States
 
         public IState NextState()
         {
-            return new CollectingNectarState(BeeContext, flower!);
+            return new CollectingNectarState(flower!);
         }
 
         public Flower FindClosestFlower()

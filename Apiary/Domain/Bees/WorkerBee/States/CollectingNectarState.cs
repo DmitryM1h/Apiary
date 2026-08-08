@@ -12,9 +12,9 @@ namespace ApiaryEngine.Domain.Bees.WorkerBee.States
         Flower flower;
         IEnumerator<int> CollectingHoneyProcess;
 
-        public CollectingNectarState(WorkerBee context, Flower flower)
+        public CollectingNectarState(Flower flower)
         {
-            Context = context;
+            Context = (WorkerBee)ApplicationContext.Context.Value!;
             this.flower = flower;
             CollectingHoneyProcess = CollectHoney();
 
@@ -54,7 +54,7 @@ namespace ApiaryEngine.Domain.Bees.WorkerBee.States
         {
             if (Context.CollectedNectar >= WorkerBee.NectarCapacity) // пока так оставлю
             {
-                return new DeliveringToHoneyState(Context);
+                return new DeliveringToHoneyState();
             }
             else
             {

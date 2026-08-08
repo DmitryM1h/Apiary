@@ -25,20 +25,15 @@ const props = defineProps({
     }
 })
 
-// Используем toRefs для реактивности
 const { nectarAmount } = toRefs(props)
 
-// Вычисляем процент нектара
 const nectarPercent = computed(() => {
-    // Максимальное значение нектара - 100
     const maxNectar = 100
     const percent = Math.min((nectarAmount.value / maxNectar) * 100, 100)
     return percent
 })
 
-// Для отладки
-console.log('Nectar amount:', nectarAmount.value)
-console.log('Nectar percent:', nectarPercent.value)
+
 </script>
 
 <style scoped>

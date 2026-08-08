@@ -13,9 +13,9 @@ public class ProducingBeeState : IState
 
     private QueenBee _context;
 
-    public ProducingBeeState(QueenBee context)
+    public ProducingBeeState()
     {
-        _context = context;
+        _context = (QueenBee)ApplicationContext.Context.Value!;
 
         _finishDate = DateTime.Now.AddSeconds(_secondsToProduce);
     }

@@ -32,12 +32,6 @@ namespace ApiaryEngine
             {
                 var hive = new Hive(i);
 
-                var queenBee = new QueenBee(hive);
-
-                List<WorkerBee> workers = [];
-
-                var guardBee = new GuardBee(hive);
-
                 for (int j = 0; j < 3; j++)
                 {
                     var bee = new WorkerBee(i);
@@ -46,7 +40,10 @@ namespace ApiaryEngine
 
                 hives.Add(hive);
 
+                var queenBee = new QueenBee(hive);
                 actors.Add(queenBee);
+
+                var guardBee = new GuardBee(hive);
                 actors.Add(guardBee);
             }
 

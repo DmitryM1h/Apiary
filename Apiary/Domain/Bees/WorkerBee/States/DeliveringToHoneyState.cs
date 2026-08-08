@@ -13,9 +13,9 @@ namespace ApiaryEngine.Domain.Bees.WorkerBee.States
         IEnumerator<Point> _routeToHome;
 
 
-        public DeliveringToHoneyState(WorkerBee context)
+        public DeliveringToHoneyState()
         {
-            _context = context;
+            _context = (WorkerBee)ApplicationContext.Context.Value!;
             _routeToHome = RouteToHome(_context.Position);
         }
         // TODO Летит в свой улей, но может перепутать с каким то шансом
@@ -66,7 +66,7 @@ namespace ApiaryEngine.Domain.Bees.WorkerBee.States
 
         public IState NextState()
         {
-            return new ProducingHoneyState(_context);
+            return new ProducingHoneyState();
         }
     }
 }

@@ -12,9 +12,9 @@ public class ProducingHoneyState : IState
 
     WorkerBee _context;
 
-    public ProducingHoneyState(WorkerBee context)
+    public ProducingHoneyState()
     {
-        _context = context;
+        _context = (WorkerBee)ApplicationContext.Context.Value!;
     }
 
     public void Act()

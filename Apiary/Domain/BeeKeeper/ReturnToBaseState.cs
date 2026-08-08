@@ -1,4 +1,5 @@
 ﻿using ApiaryEngine.Abstractions;
+using ApiaryEngine.Domain.Shared;
 using ApiaryEngine.Helpers;
 
 namespace ApiaryEngine.Domain.BeeKeeper.States
@@ -73,7 +74,7 @@ namespace ApiaryEngine.Domain.BeeKeeper.States
 
         public IState NextState()
         {
-            return new WaitingState(_context);
+            return new WaitingState<CollectingHoneyState>();
         }
     }
 }

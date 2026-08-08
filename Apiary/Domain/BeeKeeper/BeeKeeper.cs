@@ -66,10 +66,5 @@ namespace ApiaryEngine.Domain.BeeKeeper
             _currentHiveIndex = (_currentHiveIndex + 1) % _hives.Length;
             return _hives[_currentHiveIndex];
         }
-
-        public Hive GetCurrentHive()
-        {
-            return _hives[_currentHiveIndex];
-        }
     }
 }

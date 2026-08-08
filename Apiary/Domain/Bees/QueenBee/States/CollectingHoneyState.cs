@@ -35,7 +35,7 @@ namespace ApiaryEngine.Domain.Bees.QueenBee.States
         public IState NextState()
         {
             if (CollectedHoney > 0)
-                return new ProducingBeeState(Context);
+                return new ProducingBeeState();
             else
                 return new WaitingState<CollectingHoneyState>();
         }
